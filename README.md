@@ -1,17 +1,43 @@
-# fifthapp
+# StudySpace
 
-A new Flutter project.
+A Flutter flashcard study app based on the Trello brainstorm.
 
-## Getting Started
+## Available now
 
-This project is a starting point for a Flutter application.
+- Create and edit decks and cards; search the library.
+- Save decks and accumulated study time on the current device.
+- Tap or swipe to flip flashcards, then mark them remembered or still learning.
+- Type-answer quizzes with case-insensitive, whitespace-normalized matching.
+- Retry only the missed cards after either study mode.
+- 25-minute Pomodoro, 50-minute focus, and 5-minute break timers.
+- Export a deck as JSON to the clipboard and import pasted JSON.
+- GitHub Actions checks formatting, analysis, tests, and a web build.
 
-A few resources to get you started if this is your first Flutter project:
+## Run
 
-- [Learn Flutter](https://docs.flutter.dev/get-started/learn-flutter)
-- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Flutter learning resources](https://docs.flutter.dev/reference/learning-resources)
+Install Flutter compatible with the Dart SDK constraint in pubspec.yaml.
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+```sh
+flutter pub get
+flutter run -d chrome
+```
+
+On Windows, Flutter plugins require Developer Mode for symbolic links. Enable it in Windows Settings if Flutter requests it.
+
+```sh
+flutter analyze
+flutter test
+flutter build web
+```
+
+## Trello items still to implement
+
+- Server-backed accounts and secure login.
+- A server database for syncing decks between devices.
+- Deck membership, invitations, and shared editing.
+
+The current persistence uses shared_preferences for a small local prototype, rather than a server database. Export/import shares separate deck copies. No login or collaboration screen pretends to be connected to a server.
+
+Study time is counted while the study page is active, pauses when the application is backgrounded, and saves when returning to the library. Closing the process during a session can lose that session's time. Quiz grading uses exact normalized text; it does not judge equivalent free-form answers.
+
+The workflow runs when this project is pushed to GitHub; adding the file alone does not start a hosted pipeline.
