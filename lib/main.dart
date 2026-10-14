@@ -439,93 +439,99 @@ class _EditorPageState extends State<EditorPage> {
         constraints: const BoxConstraints(maxWidth: 480),
         child: Form(
           key: form,
-          child: ListView(
+          child: SingleChildScrollView(
             padding: const EdgeInsets.all(24),
-            children: [
-              TextFormField(
-                controller: title,
-                validator: requiredText,
-                decoration: const InputDecoration(labelText: 'Title'),
-              ),
-              const SizedBox(height: 20),
-              ...cards.indexed.map(
-                (entry) => Card(
-                  child: Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Column(
-                      children: [
-                        Row(
+            child: Column(
+              children: [
+                TextFormField(
+                  controller: title,
+                  validator: requiredText,
+                  decoration: const InputDecoration(labelText: 'Title'),
+                ),
+                const SizedBox(height: 20),
+                ...cards.indexed.map(
+                  (entry) => Padding(
+                    padding: const EdgeInsets.only(bottom: 16),
+                    child: Card(
+                      child: Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: Column(
                           children: [
-                            Expanded(child: Text('Card ${entry.$1 + 1}')),
-                            IconButton(
-                              tooltip: 'Remove card',
-                              onPressed: cards.length <= 2
-                                  ? null
-                                  : () {
-                                      setState(() => cards.removeAt(entry.$1));
-                                    },
-                              icon: const Icon(Icons.delete_outline),
+                            Row(
+                              children: [
+                                Expanded(child: Text('Card ${entry.$1 + 1}')),
+                                IconButton(
+                                  tooltip: 'Remove card',
+                                  onPressed: cards.length <= 2
+                                      ? null
+                                      : () {
+                                          setState(() => cards.removeAt(entry.$1));
+                                        },
+                                  icon: const Icon(Icons.delete_outline),
+                                ),
+                              ],
+                            ),
+                            TextFormField(
+                              controller: entry.$2.$1,
+                              validator: requiredText,
+                              decoration: const InputDecoration(labelText: 'Term'),
+                            ),
+                            const SizedBox(height: 12),
+                            TextFormField(
+                              controller: entry.$2.$2,
+                              validator: requiredText,
+                              maxLines: 3,
+                              decoration: const InputDecoration(
+                                labelText: 'Definition',
+                              ),
                             ),
                           ],
                         ),
-                        TextFormField(
-                          controller: entry.$2.$1,
-                          validator: requiredText,
-                          decoration: const InputDecoration(labelText: 'Term'),
-                        ),
-                        const SizedBox(height: 12),
-                        TextFormField(
-                          controller: entry.$2.$2,
-                          validator: requiredText,
-                          maxLines: 3,
-                          decoration: const InputDecoration(
-                            labelText: 'Definition',
-                          ),
-                        ),
-                      ],
+                      ),
                     ),
                   ),
                 ),
-              ),
-              const SizedBox(height: 16),
-              OutlinedButton.icon(
-                onPressed: () => setState(
-                  () => cards.add((
-                    TextEditingController(),
-                    TextEditingController(),
-                  )),
+                const SizedBox(height: 16),
+                OutlinedButton.icon(
+                  onPressed: () => setState(
+                    () => cards.add((
+                      TextEditingController(),
+                      TextEditingController(),
+                    )),
+                  ),
+                  icon: const Icon(Icons.add),
+                  label: const Text('Add card'),
                 ),
-                icon: const Icon(Icons.add),
-                label: const Text('Add card'),
-              ),
-              const SizedBox(height: 12),
-              FilledButton(
-                onPressed: () {
-                  final deckCards = cards
-                      .map(
-                        (c) => Flashcard(c.$1.text.trim(), c.$2.text.trim()),
-                      )
-                      .toList();
-                  if (form.currentState!.validate() && deckCards.length >= 2) {
-                    Navigator.pop(
-                      context,
-                      Deck(
-                        title.text.trim(),
-                        deckCards,
-                        seconds: widget.deck?.seconds ?? 0,
-                      ),
-                    );
-                  } else {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('A deck needs at least 2 cards.'),
-                      ),
-                    );
-                  }
-                },
-                child: const Text('Save deck'),
-              ),
-            ],
+                const SizedBox(height: 12),
+                FilledButton(
+                  key: const Key('saveDeckButton'),
+                  onPressed: () {
+                    final deckCards = cards
+                        .map(
+                          (c) => Flashcard(c.$1.text.trim(), c.$2.text.trim()),
+                        )
+                        .toList();
+                    if (form.currentState!.validate() && deckCards.length >= 2) {
+                      Navigator.pop(
+                        context,
+                        Deck(
+                          title.text.trim(),
+                          deckCards,
+                          seconds: widget.deck?.seconds ?? 0,
+                        ),
+                      );
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('A deck needs at least 2 cards.'),
+                        ),
+                      );
+                    }
+                  },
+                  child: const Text('Save deck'),
+                ),
+              ],
+            ),
           ),
         ),
       ),

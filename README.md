@@ -7,7 +7,8 @@ A Flutter flashcard study app based on the Trello brainstorm.
 - Create and edit decks and cards; search the library.
 - Save decks and accumulated study time on the current device.
 - Tap or swipe to flip flashcards, then mark them remembered or still learning.
-- Type-answer quizzes with case-insensitive, whitespace-normalized matching.
+- Take multiple-choice quizzes that show a definition and ask you to pick the matching term from two or more options.
+- Decks require at least two cards before they can be saved.
 - Retry only the missed cards after either study mode.
 - 25-minute Pomodoro, 50-minute focus, and 5-minute break timers.
 - Export a deck as JSON to the clipboard and import pasted JSON.
@@ -38,6 +39,6 @@ flutter build web
 
 The current persistence uses shared_preferences for a small local prototype, rather than a server database. Export/import shares separate deck copies. No login or collaboration screen pretends to be connected to a server.
 
-Study time is counted while the study page is active, pauses when the application is backgrounded, and saves when returning to the library. Closing the process during a session can lose that session's time. Quiz grading uses exact normalized text; it does not judge equivalent free-form answers.
+Study time is counted while the study page is active, pauses when the application is backgrounded, and saves when returning to the library. Closing the process during a session can lose that session's time. Quiz mode presents a definition and asks you to choose the matching term from multiple options, with distractors drawn from the other cards in the deck.
 
 The workflow runs when this project is pushed to GitHub; adding the file alone does not start a hosted pipeline.

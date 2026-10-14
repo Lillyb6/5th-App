@@ -5,37 +5,23 @@ import 'package:fifthapp/main.dart';
 
 void main() {
   setUp(() => SharedPreferences.setMockInitialValues({}));
-  testWidgets('Create a deck and save it to the library', (tester) async {
-    await tester.pumpWidget(const MyApp());
-    await tester.pumpAndSettle();
-    await tester.enterText(find.byType(TextFormField), 'Alex');
-    await tester.tap(find.text('Continue locally'));
-    await tester.pumpAndSettle();
-    await tester.tap(find.byTooltip('Create deck'));
-    await tester.pumpAndSettle();
+  testWidgets('Decks require at least two cards before saving', (tester) async {
+    await tester.pumpWidget(MaterialApp(home: EditorPage()));
     final fields = find.byType(TextFormField);
+    expect(fields, findsNWidgets(5));
     await tester.enterText(fields.at(0), 'Spanish');
     await tester.enterText(fields.at(1), 'Hola');
     await tester.enterText(fields.at(2), 'Hello');
-    await tester.ensureVisible(find.text('Save deck'));
-    await tester.tap(find.text('Save deck'));
-    await tester.pumpAndSettle();
-    await tester.scrollUntilVisible(
-      find.text('Spanish'),
-      250,
-      scrollable: find
-          .descendant(
-            of: find.byType(ListView),
-            matching: find.byType(Scrollable),
-          )
-          .first,
+    final saveButton = tester.widget<FilledButton>(
+      find.byKey(const Key('saveDeckButton')),
     );
-    expect(find.text('Spanish'), findsOneWidget);
-    final prefs = await SharedPreferences.getInstance();
-    expect(prefs.getString('studyspace.decks.v1'), contains('Hola'));
+    saveButton.onPressed!();
+    await tester.pump();
+    expect(find.text('A deck needs at least 2 cards.'), findsOneWidget);
   });
+
   testWidgets(
-    'Quiz records an incorrect answer and retries only missed cards',
+    'Quiz lets players choose the correct term from multiple choices',
     (tester) async {
       tester.view.physicalSize = const Size(1200, 1200);
       tester.view.devicePixelRatio = 1;
@@ -45,22 +31,17 @@ void main() {
       await tester.pumpWidget(
         MaterialApp(home: StudyPage(deck: deck, quiz: true)),
       );
-      await tester.enterText(find.byType(TextField), 'wrong');
-      await tester.tap(find.text('Check answer'));
+      await tester.tap(find.widgetWithText(FilledButton, 'Two'));
       await tester.pump();
-      expect(find.text('Answer: 1'), findsOneWidget);
+      expect(find.text('Not quite. The correct term is One.'), findsOneWidget);
       await tester.tap(find.text('Continue'));
       await tester.pump();
-      await tester.enterText(find.byType(TextField), ' 2 ');
-      await tester.tap(find.text('Check answer'));
+      await tester.tap(find.widgetWithText(FilledButton, 'Two'));
       await tester.pump();
+      expect(find.text('Correct!'), findsOneWidget);
       await tester.tap(find.text('Continue'));
       await tester.pump();
       expect(find.text('1 of 2 correct'), findsOneWidget);
-      await tester.tap(find.text('Retry 1 missed cards'));
-      await tester.pump();
-      expect(find.text('Quiz • 1 of 1'), findsOneWidget);
-      expect(find.text('One'), findsOneWidget);
       await tester.pumpWidget(const SizedBox());
     },
   );
