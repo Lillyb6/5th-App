@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'main.dart';
 
-const ink = Color(0xff93445f);
+const ink = Color(0xff4338ca);
 
 class EntryPage extends StatefulWidget {
   const EntryPage({super.key});
@@ -47,7 +47,7 @@ class _EntryPageState extends State<EntryPage> {
                     height: 144,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: const Color(0xfff3dce4),
+                      color: const Color(0xffe0e7ff),
                       border: Border.all(color: ink, width: 2),
                     ),
                     child: const Icon(
@@ -279,7 +279,7 @@ class StudyTimerBar extends StatelessWidget {
       const SizedBox(height: 8),
       Container(
         decoration: BoxDecoration(
-          color: const Color(0xfff3dce4),
+          color: const Color(0xffe0e7ff),
           borderRadius: BorderRadius.circular(16),
           border: Border.all(color: ink),
         ),

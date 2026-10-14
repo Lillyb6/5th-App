@@ -42,8 +42,8 @@ class MyApp extends StatelessWidget {
     title: 'StudySpace',
     debugShowCheckedModeBanner: false,
     theme: ThemeData(
-      colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xff93445f)),
-      scaffoldBackgroundColor: const Color(0xfffffaf6),
+      colorScheme: ColorScheme.fromSeed(seedColor: ink),
+      scaffoldBackgroundColor: const Color(0xfff8f9ff),
       useMaterial3: true,
       inputDecorationTheme: const InputDecorationTheme(
         border: OutlineInputBorder(),
@@ -318,10 +318,7 @@ class _LibraryPageState extends State<LibraryPage> {
                               children: [
                                 Row(
                                   children: [
-                                    const Icon(
-                                      Icons.style,
-                                      color: Color(0xff93445f),
-                                    ),
+                                    const Icon(Icons.style, color: ink),
                                     const SizedBox(width: 12),
                                     Expanded(
                                       child: Text(
@@ -654,11 +651,7 @@ class _StudyPageState extends State<StudyPage> with WidgetsBindingObserver {
             ),
             const SizedBox(height: 24),
             if (complete) ...[
-              const Icon(
-                Icons.celebration_outlined,
-                size: 64,
-                color: Color(0xff93445f),
-              ),
+              const Icon(Icons.celebration_outlined, size: 64, color: ink),
               const SizedBox(height: 16),
               Text(
                 'Session complete',
