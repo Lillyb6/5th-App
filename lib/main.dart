@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:math';
 
 import 'mockup.dart';
 
@@ -188,7 +189,7 @@ class _LibraryPageState extends State<LibraryPage> {
     try {
       final deck = Deck.fromJson(jsonDecode(raw) as Map<String, dynamic>);
       if (deck.title.trim().isEmpty ||
-          deck.cards.isEmpty ||
+          deck.cards.length < 2 ||
           deck.cards.any(
             (c) => c.term.trim().isEmpty || c.answer.trim().isEmpty,
           )) {
@@ -408,7 +409,7 @@ class _EditorPageState extends State<EditorPage> {
   void initState() {
     super.initState();
     title = TextEditingController(text: widget.deck?.title);
-    cards = (widget.deck?.cards ?? [Flashcard('', '')])
+    cards = (widget.deck?.cards ?? [Flashcard('', ''), Flashcard('', '')])
         .map(
           (c) => (
             TextEditingController(text: c.term),
@@ -458,7 +459,7 @@ class _EditorPageState extends State<EditorPage> {
                             Expanded(child: Text('Card ${entry.$1 + 1}')),
                             IconButton(
                               tooltip: 'Remove card',
-                              onPressed: cards.length == 1
+                              onPressed: cards.length <= 2
                                   ? null
                                   : () {
                                       setState(() => cards.removeAt(entry.$1));
@@ -500,18 +501,24 @@ class _EditorPageState extends State<EditorPage> {
               const SizedBox(height: 12),
               FilledButton(
                 onPressed: () {
-                  if (form.currentState!.validate()) {
+                  final deckCards = cards
+                      .map(
+                        (c) => Flashcard(c.$1.text.trim(), c.$2.text.trim()),
+                      )
+                      .toList();
+                  if (form.currentState!.validate() && deckCards.length >= 2) {
                     Navigator.pop(
                       context,
                       Deck(
                         title.text.trim(),
-                        cards
-                            .map(
-                              (c) =>
-                                  Flashcard(c.$1.text.trim(), c.$2.text.trim()),
-                            )
-                            .toList(),
+                        deckCards,
                         seconds: widget.deck?.seconds ?? 0,
+                      ),
+                    );
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('A deck needs at least 2 cards.'),
                       ),
                     );
                   }
@@ -621,8 +628,19 @@ class _StudyPageState extends State<StudyPage> with WidgetsBindingObserver {
     });
   }
 
-  String normalize(String text) =>
-      text.trim().toLowerCase().replaceAll(RegExp(r'\s+'), ' ');
+  List<String> buildQuizOptions() {
+    final currentTerm = round[index].term;
+    final distractors = round
+        .where((card) => card.term != currentTerm)
+        .map((card) => card.term)
+        .toList()
+      ..shuffle(Random());
+    final options = <String>[currentTerm];
+    final targetCount = round.length < 4 ? round.length : 4;
+    options.addAll(distractors.take(targetCount - 1));
+    return options..shuffle(Random());
+  }
+
   String duration(int seconds) =>
       '${seconds ~/ 60}:${(seconds % 60).toString().padLeft(2, '0')}';
   @override
@@ -730,34 +748,37 @@ class _StudyPageState extends State<StudyPage> with WidgetsBindingObserver {
               ),
               const SizedBox(height: 24),
               if (widget.quiz) ...[
-                TextField(
-                  controller: answer,
-                  enabled: correct == null,
-                  decoration: const InputDecoration(
-                    labelText: 'Type your answer',
-                  ),
+                Text(
+                  'Which term matches this definition?',
+                  style: Theme.of(context).textTheme.titleMedium,
                 ),
-                const SizedBox(height: 8),
-                const Text(
-                  'Answers match exactly, ignoring letter case and extra spaces.',
+                const SizedBox(height: 16),
+                Card(
+                  child: Padding(
+                    padding: const EdgeInsets.all(24),
+                    child: Text(
+                      round[index].answer,
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context).textTheme.headlineSmall,
+                    ),
+                  ),
                 ),
                 const SizedBox(height: 16),
                 if (correct == null)
-                  FilledButton(
-                    onPressed: () {
-                      if (answer.text.trim().isNotEmpty) {
-                        setState(
-                          () => correct =
-                              normalize(answer.text) ==
-                              normalize(round[index].answer),
-                        );
-                      }
-                    },
-                    child: const Text('Check answer'),
+                  ...buildQuizOptions().map(
+                    (option) => Padding(
+                      padding: const EdgeInsets.only(bottom: 12),
+                      child: FilledButton.tonal(
+                        onPressed: () => setState(() {
+                          correct = option == round[index].term;
+                        }),
+                        child: Text(option),
+                      ),
+                    ),
                   )
                 else ...[
                   Text(
-                    correct! ? 'Correct!' : 'Answer: ${round[index].answer}',
+                    correct! ? 'Correct!' : 'Not quite. The correct term is ${round[index].term}.',
                     style: TextStyle(
                       color: correct!
                           ? Colors.green.shade800
