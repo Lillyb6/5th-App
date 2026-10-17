@@ -5,8 +5,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:fifthapp/l10n/app_localizations.dart';
 
 const storageKey = 'studyspace.decks.v1';
+
+Finder get librarySearchField => find.byWidgetPredicate(
+  (widget) =>
+      widget is TextField && widget.decoration?.hintText == 'Search your decks',
+);
 
 Future<void> tap(WidgetTester tester, Finder finder) async {
   await tester.ensureVisible(finder);
@@ -17,8 +23,7 @@ Future<void> tap(WidgetTester tester, Finder finder) async {
 Future<void> openLibrary(WidgetTester tester) async {
   await tester.pumpWidget(const MyApp());
   await tester.pumpAndSettle();
-  await tester.enterText(find.byType(TextFormField), 'Alex');
-  await tap(tester, find.text('Continue locally'));
+  await tap(tester, find.text('Continue as guest'));
 }
 
 Future<void> openStudy(
@@ -29,6 +34,8 @@ Future<void> openStudy(
 }) async {
   await tester.pumpWidget(
     MaterialApp(
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
       home: StudyPage(
         deck: Deck('Practice', [
           Flashcard('Greeting', 'Hello world'),
@@ -65,8 +72,10 @@ void main() {
     await tester.enterText(fields.at(0), 'Spanish');
     await tester.enterText(fields.at(1), 'Hola');
     await tester.enterText(fields.at(2), 'Hello');
+    await tester.enterText(fields.at(3), 'Adios');
+    await tester.enterText(fields.at(4), 'Goodbye');
     await tap(tester, find.text('Save deck'));
-    await tester.enterText(find.byType(TextField), 'SPANISH');
+    await tester.enterText(librarySearchField, 'SPANISH');
     await tester.pumpAndSettle();
     expect(find.text('Spanish'), findsOneWidget);
     expect(find.text('Biology essentials'), findsNothing);
@@ -77,7 +86,7 @@ void main() {
     await tester.pumpWidget(const SizedBox());
     await tester.pumpAndSettle();
     await openLibrary(tester);
-    await tester.enterText(find.byType(TextField), 'spanish');
+    await tester.enterText(librarySearchField, 'spanish');
     await tester.pumpAndSettle();
     await tap(tester, find.byTooltip('Edit deck'));
     expect(
@@ -110,7 +119,7 @@ void main() {
     await tap(tester, find.text('Still learning'));
     expect(find.text('1 of 2 remembered'), findsOneWidget);
     await tap(tester, find.text('Retry 1 missed cards'));
-    expect(find.text('Farewell'), findsOneWidget);
+    expect(find.text('Farewell'), findsAtLeastNWidgets(1));
     expect(find.text('Greeting'), findsNothing);
     await tap(tester, find.text('Farewell'));
     await tap(tester, find.text('Got it'));
@@ -118,25 +127,25 @@ void main() {
     expect(find.textContaining('missed cards'), findsNothing);
   });
 
-  testWidgets('Quiz normalizes answers and retries only incorrect answers', (
+  testWidgets('Multiple-choice quiz retries only incorrect answers', (
     tester,
   ) async {
     await prepare(tester);
     await openStudy(tester, quiz: true);
-    await tester.enterText(find.byType(TextField), '  HELLO   world  ');
-    await tap(tester, find.text('Check answer'));
+    await tap(tester, find.widgetWithText(FilledButton, 'Greeting'));
     expect(find.text('Correct!'), findsOneWidget);
     await tap(tester, find.text('Continue'));
-    await tester.enterText(find.byType(TextField), 'wrong');
-    await tap(tester, find.text('Check answer'));
-    expect(find.text('Answer: Goodbye'), findsOneWidget);
+    await tap(tester, find.widgetWithText(FilledButton, 'Greeting'));
+    expect(
+      find.text('Not quite. The correct term is Farewell.'),
+      findsOneWidget,
+    );
     await tap(tester, find.text('Continue'));
     expect(find.text('1 of 2 correct'), findsOneWidget);
     await tap(tester, find.text('Retry 1 missed cards'));
-    expect(find.text('Farewell'), findsOneWidget);
+    expect(find.text('Farewell'), findsAtLeastNWidgets(1));
     expect(find.text('Greeting'), findsNothing);
-    await tester.enterText(find.byType(TextField), 'goodbye');
-    await tap(tester, find.text('Check answer'));
+    await tap(tester, find.widgetWithText(FilledButton, 'Farewell'));
     await tap(tester, find.text('Continue'));
     expect(find.text('1 of 1 correct'), findsOneWidget);
   });

@@ -13,10 +13,10 @@ void main() {
     addTearDown(tester.view.resetPhysicalSize);
     addTearDown(tester.view.resetDevicePixelRatio);
     await tester.pumpWidget(const MyApp());
-    await tester.enterText(find.byType(TextFormField), 'Sam');
-    await tester.tap(find.text('Continue locally'));
     await tester.pumpAndSettle();
-    expect(find.text('Hi, Sam'), findsOneWidget);
+    await tester.tap(find.text('Continue as guest'));
+    await tester.pumpAndSettle();
+    expect(find.text('Hi, Guest'), findsOneWidget);
     await tester.tap(find.text('Timer'));
     await tester.pumpAndSettle();
     expect(find.text('Pomodoro'), findsOneWidget);

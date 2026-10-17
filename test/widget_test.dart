@@ -3,10 +3,18 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:fifthapp/main.dart';
 
+import 'package:fifthapp/l10n/app_localizations.dart';
+
+Widget localizedTestApp(Widget home) => MaterialApp(
+  localizationsDelegates: AppLocalizations.localizationsDelegates,
+  supportedLocales: AppLocalizations.supportedLocales,
+  home: home,
+);
+
 void main() {
   setUp(() => SharedPreferences.setMockInitialValues({}));
   testWidgets('Decks require at least two cards before saving', (tester) async {
-    await tester.pumpWidget(MaterialApp(home: EditorPage()));
+    await tester.pumpWidget(localizedTestApp(EditorPage()));
     final fields = find.byType(TextFormField);
     expect(fields, findsNWidgets(5));
     await tester.enterText(fields.at(0), 'Spanish');
@@ -29,7 +37,7 @@ void main() {
       addTearDown(tester.view.resetDevicePixelRatio);
       final deck = Deck('Test', [Flashcard('One', '1'), Flashcard('Two', '2')]);
       await tester.pumpWidget(
-        MaterialApp(home: StudyPage(deck: deck, quiz: true)),
+        localizedTestApp(StudyPage(deck: deck, quiz: true)),
       );
       await tester.tap(find.widgetWithText(FilledButton, 'Two'));
       await tester.pump();

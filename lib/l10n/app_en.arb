@@ -1,0 +1,186 @@
+{
+  "@@locale": "en",
+  "tagline": "Make a little room for learning.",
+  "demoCredentials": "Try the demo account: demo / studyspace123",
+  "signIn": "Sign in",
+  "createAccount": "Create account",
+  "continueAsGuest": "Continue as guest",
+  "localOnlyNotice": "Accounts and decks are stored only on this device. This prototype does not use server authentication or sync.",
+  "username": "Username",
+  "password": "Password",
+  "confirmPassword": "Confirm password",
+  "minimumUsername": "Use at least 3 characters for your username",
+  "minimumPassword": "Use a password with at least 8 characters",
+  "passwordsMismatch": "Passwords do not match",
+  "usernameTaken": "That username is already taken.",
+  "invalidCredentials": "Username or password is incorrect.",
+  "accountStorageError": "Could not access local accounts: {error}",
+  "@accountStorageError": {
+    "placeholders": {
+      "error": {"type": "String"}
+    }
+  },
+  "settingsSaveError": "Could not save settings: {error}",
+  "@settingsSaveError": {
+    "placeholders": {
+      "error": {"type": "String"}
+    }
+  },
+  "settingsLoadError": "Could not load app settings: {error}",
+  "@settingsLoadError": {
+    "placeholders": {
+      "error": {"type": "String"}
+    }
+  },
+  "deckLoadError": "Saved decks could not be loaded. Restart the app before making changes.",
+  "needAccount": "Need an account? Sign up",
+  "haveAccount": "Already have an account? Sign in",
+  "back": "Back",
+  "create": "Create",
+  "createDeck": "Create deck",
+  "importDeckTooltip": "Import deck",
+  "timer": "Timer",
+  "settings": "Settings",
+  "language": "Language",
+  "darkMode": "Dark mode",
+  "english": "English",
+  "spanish": "Spanish",
+  "vietnamese": "Vietnamese",
+  "chinese": "Chinese",
+  "japanese": "Japanese",
+  "dutch": "Dutch",
+  "german": "German",
+  "hiUser": "Hi, {username}",
+  "@hiUser": {
+    "placeholders": {
+      "username": {"type": "String"}
+    }
+  },
+  "deckCount": "{count, plural, =0{No decks} =1{1 deck} other{{count} decks}}",
+  "@deckCount": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "flashcardCount": "{count, plural, =0{No flashcards} =1{1 flashcard} other{{count} flashcards}}",
+  "@flashcardCount": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "minutesStudied": "{count} minutes studied",
+  "@minutesStudied": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "searchDecks": "Search your decks",
+  "yourLibrary": "Your library",
+  "noDecksFound": "No decks found. Create a deck to get started.",
+  "cardsStudied": "{cards} cards • {minutes} minutes studied",
+  "@cardsStudied": {
+    "placeholders": {
+      "cards": {"type": "int"},
+      "minutes": {"type": "int"}
+    }
+  },
+  "editDeck": "Edit deck",
+  "exportDeck": "Export deck",
+  "deckCopied": "Deck JSON copied. Paste it into a file or share it for import.",
+  "flashcards": "Flashcards",
+  "takeQuiz": "Take quiz",
+  "newDeck": "New deck",
+  "title": "Title",
+  "cardNumber": "Card {number}",
+  "@cardNumber": {
+    "placeholders": {
+      "number": {"type": "int"}
+    }
+  },
+  "removeCard": "Remove card",
+  "term": "Term",
+  "definition": "Definition",
+  "addCard": "Add card",
+  "saveDeck": "Save deck",
+  "requiredText": "Please enter some text",
+  "minimumTwoCards": "A deck needs at least 2 cards.",
+  "importDeck": "Import a deck",
+  "pasteDeckJson": "Paste exported deck JSON",
+  "cancel": "Cancel",
+  "import": "Import",
+  "invalidDeck": "Invalid deck. Paste a complete StudySpace export.",
+  "saveError": "Could not save changes on this device.",
+  "signOut": "Sign out",
+  "focusComplete": "Focus session complete. Take a break!",
+  "sessionComplete": "Session complete",
+  "retryMissed": "Retry {count} missed cards",
+  "@retryMissed": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "backToLibrary": "Back to library",
+  "quizProgress": "Quiz • {current} of {total}",
+  "studyProgress": "Flashcards • {current} of {total}",
+  "@quizProgress": {
+    "placeholders": {
+      "current": {"type": "int"},
+      "total": {"type": "int"}
+    }
+  },
+  "@studyProgress": {
+    "placeholders": {
+      "current": {"type": "int"},
+      "total": {"type": "int"}
+    }
+  },
+  "correctCount": "{correct} of {total} correct",
+  "rememberedCount": "{correct} of {total} remembered",
+  "@correctCount": {
+    "placeholders": {
+      "correct": {"type": "int"},
+      "total": {"type": "int"}
+    }
+  },
+  "@rememberedCount": {
+    "placeholders": {
+      "correct": {"type": "int"},
+      "total": {"type": "int"}
+    }
+  },
+  "tapOrSwipe": "Tap or swipe to flip",
+  "whichTerm": "Which term matches this definition?",
+  "correct": "Correct!",
+  "incorrectAnswer": "Not quite. The correct term is {term}.",
+  "@incorrectAnswer": {
+    "placeholders": {
+      "term": {"type": "String"}
+    }
+  },
+  "continueButton": "Continue",
+  "flipCard": "Flip card",
+  "stillLearning": "Still learning",
+  "gotIt": "Got it",
+  "makeTimeToStudy": "Make time to study",
+  "createDeckFirst": "Create a deck first, then come back to start a timed flashcard session.",
+  "studyDeck": "Study deck",
+  "pomodoro": "Pomodoro",
+  "focusMinutes": "25 minutes of focus",
+  "minutes": "{count} minutes",
+  "@minutes": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "timerDuration": "Timer duration",
+  "studyWithCountdown": "Study flashcards with the countdown at the top.",
+  "pauseTimer": "Pause focus timer",
+  "startTimer": "Start focus timer",
+  "resetTimer": "Reset timer",
+  "studyTime": "Study time {duration}",
+  "@studyTime": {
+    "placeholders": {
+      "duration": {"type": "String"}
+    }
+  }
+}
