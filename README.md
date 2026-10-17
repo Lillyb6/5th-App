@@ -12,6 +12,9 @@ A Flutter flashcard study app based on the Trello brainstorm.
 - Retry only the missed cards after either study mode.
 - 25-minute Pomodoro, 50-minute focus, and 5-minute break timers.
 - Export a deck as JSON to the clipboard and import pasted JSON.
+- Enter as a guest, create a local account, or use the demo account with dedicated Earth Science and American Classic Literature decks.
+- Choose English, Spanish, Vietnamese, Chinese, Japanese, Dutch, or German for the app interface.
+- Switch between light and dark themes; language and theme preferences are saved on the device.
 - GitHub Actions checks formatting, analysis, tests, and a web build.
 
 ## Run
@@ -33,11 +36,13 @@ flutter build web
 
 ## Trello items still to implement
 
-- Server-backed accounts and secure login.
+- Server-backed accounts and production-grade authentication.
 - A server database for syncing decks between devices.
 - Deck membership, invitations, and shared editing.
 
-The current persistence uses shared_preferences for a small local prototype, rather than a server database. Export/import shares separate deck copies. No login or collaboration screen pretends to be connected to a server.
+The current accounts and deck data are stored locally with shared_preferences; they do not sync between devices. Passwords are stored as salted SHA-256 hashes, but this local prototype is not production authentication or secure credential storage. Do not use real or reused passwords. The demo sign-in is `demo` / `studyspace123`. Guest access continues to use the device's existing local library. Export/import shares separate deck copies. No login or collaboration screen pretends to be connected to a server.
+
+The app interface is available in English, Spanish, Vietnamese, Chinese, Japanese, Dutch, and German. User-created deck titles and card content are not automatically translated.
 
 Study time is counted while the study page is active, pauses when the application is backgrounded, and saves when returning to the library. Closing the process during a session can lose that session's time. Quiz mode presents a definition and asks you to choose the matching term from multiple options, with distractors drawn from the other cards in the deck.
 
