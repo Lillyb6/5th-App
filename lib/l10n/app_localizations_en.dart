@@ -16,6 +16,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get demoCredentials => 'Try the demo account: demo / studyspace123';
 
   @override
+  String get supabaseSignInHint =>
+      'Sign in or create an account to sync your decks with Supabase.';
+
+  @override
   String get signIn => 'Sign in';
 
   @override
@@ -29,7 +33,14 @@ class AppLocalizationsEn extends AppLocalizations {
       'Accounts and decks are stored only on this device. This prototype does not use server authentication or sync.';
 
   @override
+  String get supabaseNotice =>
+      'Guest decks stay on this device. Signed-in account decks sync with Supabase.';
+
+  @override
   String get username => 'Username';
+
+  @override
+  String get email => 'Email';
 
   @override
   String get password => 'Password';
@@ -53,6 +64,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get invalidCredentials => 'Username or password is incorrect.';
 
   @override
+  String get emailInvalid => 'Enter a valid email address';
+
+  @override
+  String get emailConfirmation =>
+      'Check your email to confirm your account, then sign in.';
+
+  @override
+  String authRequestError(String error) {
+    return 'Could not complete the account request: $error';
+  }
+
+  @override
   String accountStorageError(String error) {
     return 'Could not access local accounts: $error';
   }
@@ -70,6 +93,16 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get deckLoadError =>
       'Saved decks could not be loaded. Restart the app before making changes.';
+
+  @override
+  String supabaseDeckError(String error) {
+    return 'Could not sync decks with Supabase: $error';
+  }
+
+  @override
+  String supabaseInitError(String error) {
+    return 'Could not connect to Supabase: $error';
+  }
 
   @override
   String get needAccount => 'Need an account? Sign up';

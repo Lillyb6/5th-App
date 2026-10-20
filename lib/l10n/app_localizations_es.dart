@@ -16,6 +16,10 @@ class AppLocalizationsEs extends AppLocalizations {
   String get demoCredentials => 'Prueba la cuenta demo: demo / studyspace123';
 
   @override
+  String get supabaseSignInHint =>
+      'Inicia sesión o crea una cuenta para sincronizar tus mazos con Supabase.';
+
+  @override
   String get signIn => 'Iniciar sesión';
 
   @override
@@ -29,7 +33,14 @@ class AppLocalizationsEs extends AppLocalizations {
       'Las cuentas y los mazos solo se guardan en este dispositivo. Esta versión no usa autenticación ni sincronización con un servidor.';
 
   @override
+  String get supabaseNotice =>
+      'Los mazos de invitado se guardan en este dispositivo. Los mazos de las cuentas iniciadas se sincronizan con Supabase.';
+
+  @override
   String get username => 'Nombre de usuario';
+
+  @override
+  String get email => 'Correo electrónico';
 
   @override
   String get password => 'Contraseña';
@@ -56,6 +67,18 @@ class AppLocalizationsEs extends AppLocalizations {
       'El nombre de usuario o la contraseña no son correctos.';
 
   @override
+  String get emailInvalid => 'Introduce una dirección de correo válida';
+
+  @override
+  String get emailConfirmation =>
+      'Revisa tu correo para confirmar la cuenta y luego inicia sesión.';
+
+  @override
+  String authRequestError(String error) {
+    return 'No se pudo completar la solicitud de cuenta: $error';
+  }
+
+  @override
   String accountStorageError(String error) {
     return 'No se pudo acceder a las cuentas locales: $error';
   }
@@ -73,6 +96,16 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get deckLoadError =>
       'No se pudieron cargar los mazos guardados. Reinicia la aplicación antes de hacer cambios.';
+
+  @override
+  String supabaseDeckError(String error) {
+    return 'No se pudieron sincronizar los mazos con Supabase: $error';
+  }
+
+  @override
+  String supabaseInitError(String error) {
+    return 'No se pudo conectar con Supabase: $error';
+  }
 
   @override
   String get needAccount => '¿No tienes cuenta? Regístrate';

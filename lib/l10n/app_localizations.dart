@@ -120,6 +120,12 @@ abstract class AppLocalizations {
   /// **'Try the demo account: demo / studyspace123'**
   String get demoCredentials;
 
+  /// No description provided for @supabaseSignInHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign in or create an account to sync your decks with Supabase.'**
+  String get supabaseSignInHint;
+
   /// No description provided for @signIn.
   ///
   /// In en, this message translates to:
@@ -144,11 +150,23 @@ abstract class AppLocalizations {
   /// **'Accounts and decks are stored only on this device. This prototype does not use server authentication or sync.'**
   String get localOnlyNotice;
 
+  /// No description provided for @supabaseNotice.
+  ///
+  /// In en, this message translates to:
+  /// **'Guest decks stay on this device. Signed-in account decks sync with Supabase.'**
+  String get supabaseNotice;
+
   /// No description provided for @username.
   ///
   /// In en, this message translates to:
   /// **'Username'**
   String get username;
+
+  /// No description provided for @email.
+  ///
+  /// In en, this message translates to:
+  /// **'Email'**
+  String get email;
 
   /// No description provided for @password.
   ///
@@ -192,6 +210,24 @@ abstract class AppLocalizations {
   /// **'Username or password is incorrect.'**
   String get invalidCredentials;
 
+  /// No description provided for @emailInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a valid email address'**
+  String get emailInvalid;
+
+  /// No description provided for @emailConfirmation.
+  ///
+  /// In en, this message translates to:
+  /// **'Check your email to confirm your account, then sign in.'**
+  String get emailConfirmation;
+
+  /// No description provided for @authRequestError.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not complete the account request: {error}'**
+  String authRequestError(String error);
+
   /// No description provided for @accountStorageError.
   ///
   /// In en, this message translates to:
@@ -215,6 +251,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Saved decks could not be loaded. Restart the app before making changes.'**
   String get deckLoadError;
+
+  /// No description provided for @supabaseDeckError.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not sync decks with Supabase: {error}'**
+  String supabaseDeckError(String error);
+
+  /// No description provided for @supabaseInitError.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not connect to Supabase: {error}'**
+  String supabaseInitError(String error);
 
   /// No description provided for @needAccount.
   ///

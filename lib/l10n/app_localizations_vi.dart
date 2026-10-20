@@ -16,6 +16,10 @@ class AppLocalizationsVi extends AppLocalizations {
   String get demoCredentials => 'Dùng thử tài khoản mẫu: demo / studyspace123';
 
   @override
+  String get supabaseSignInHint =>
+      'Đăng nhập hoặc tạo tài khoản để đồng bộ bộ thẻ với Supabase.';
+
+  @override
   String get signIn => 'Đăng nhập';
 
   @override
@@ -29,7 +33,14 @@ class AppLocalizationsVi extends AppLocalizations {
       'Tài khoản và bộ thẻ chỉ được lưu trên thiết bị này. Bản thử nghiệm không dùng máy chủ để xác thực hoặc đồng bộ.';
 
   @override
+  String get supabaseNotice =>
+      'Bộ thẻ khách chỉ lưu trên thiết bị này. Bộ thẻ của tài khoản đã đăng nhập được đồng bộ với Supabase.';
+
+  @override
   String get username => 'Tên người dùng';
+
+  @override
+  String get email => 'Email';
 
   @override
   String get password => 'Mật khẩu';
@@ -53,6 +64,18 @@ class AppLocalizationsVi extends AppLocalizations {
   String get invalidCredentials => 'Tên người dùng hoặc mật khẩu không đúng.';
 
   @override
+  String get emailInvalid => 'Vui lòng nhập địa chỉ email hợp lệ';
+
+  @override
+  String get emailConfirmation =>
+      'Hãy kiểm tra email để xác nhận tài khoản, sau đó đăng nhập.';
+
+  @override
+  String authRequestError(String error) {
+    return 'Không thể hoàn tất yêu cầu tài khoản: $error';
+  }
+
+  @override
   String accountStorageError(String error) {
     return 'Không thể truy cập tài khoản trên thiết bị: $error';
   }
@@ -70,6 +93,16 @@ class AppLocalizationsVi extends AppLocalizations {
   @override
   String get deckLoadError =>
       'Không thể tải các bộ thẻ đã lưu. Hãy khởi động lại ứng dụng trước khi thay đổi.';
+
+  @override
+  String supabaseDeckError(String error) {
+    return 'Không thể đồng bộ bộ thẻ với Supabase: $error';
+  }
+
+  @override
+  String supabaseInitError(String error) {
+    return 'Không thể kết nối với Supabase: $error';
+  }
 
   @override
   String get needAccount => 'Chưa có tài khoản? Đăng ký';

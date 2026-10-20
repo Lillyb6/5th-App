@@ -17,6 +17,10 @@ class AppLocalizationsNl extends AppLocalizations {
       'Probeer het demo-account: demo / studyspace123';
 
   @override
+  String get supabaseSignInHint =>
+      'Log in of maak een account om je kaartensets met Supabase te synchroniseren.';
+
+  @override
   String get signIn => 'Inloggen';
 
   @override
@@ -30,7 +34,14 @@ class AppLocalizationsNl extends AppLocalizations {
       'Accounts en kaartensets worden alleen op dit apparaat opgeslagen. Deze proefversie gebruikt geen serveraanmelding of synchronisatie.';
 
   @override
+  String get supabaseNotice =>
+      'Gastsets blijven op dit apparaat. Sets van aangemelde accounts worden met Supabase gesynchroniseerd.';
+
+  @override
   String get username => 'Gebruikersnaam';
+
+  @override
+  String get email => 'E-mailadres';
 
   @override
   String get password => 'Wachtwoord';
@@ -55,6 +66,18 @@ class AppLocalizationsNl extends AppLocalizations {
   String get invalidCredentials => 'Gebruikersnaam of wachtwoord is onjuist.';
 
   @override
+  String get emailInvalid => 'Voer een geldig e-mailadres in';
+
+  @override
+  String get emailConfirmation =>
+      'Controleer je e-mail om je account te bevestigen en log daarna in.';
+
+  @override
+  String authRequestError(String error) {
+    return 'Accountverzoek kon niet worden voltooid: $error';
+  }
+
+  @override
   String accountStorageError(String error) {
     return 'Lokale accounts zijn niet toegankelijk: $error';
   }
@@ -72,6 +95,16 @@ class AppLocalizationsNl extends AppLocalizations {
   @override
   String get deckLoadError =>
       'Opgeslagen kaartensets konden niet worden geladen. Start de app opnieuw voordat je wijzigingen aanbrengt.';
+
+  @override
+  String supabaseDeckError(String error) {
+    return 'Kaartensets konden niet met Supabase worden gesynchroniseerd: $error';
+  }
+
+  @override
+  String supabaseInitError(String error) {
+    return 'Kan geen verbinding maken met Supabase: $error';
+  }
 
   @override
   String get needAccount => 'Nog geen account? Aanmelden';
