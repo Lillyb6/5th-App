@@ -2,11 +2,14 @@
   "@@locale": "en",
   "tagline": "Make a little room for learning.",
   "demoCredentials": "Try the demo account: demo / studyspace123",
+  "supabaseSignInHint": "Sign in or create an account to sync your decks with Supabase.",
   "signIn": "Sign in",
   "createAccount": "Create account",
   "continueAsGuest": "Continue as guest",
   "localOnlyNotice": "Accounts and decks are stored only on this device. This prototype does not use server authentication or sync.",
+  "supabaseNotice": "Guest decks stay on this device. Signed-in account decks sync with Supabase.",
   "username": "Username",
+  "email": "Email",
   "password": "Password",
   "confirmPassword": "Confirm password",
   "minimumUsername": "Use at least 3 characters for your username",
@@ -14,6 +17,14 @@
   "passwordsMismatch": "Passwords do not match",
   "usernameTaken": "That username is already taken.",
   "invalidCredentials": "Username or password is incorrect.",
+  "emailInvalid": "Enter a valid email address",
+  "emailConfirmation": "Check your email to confirm your account, then sign in.",
+  "authRequestError": "Could not complete the account request: {error}",
+  "@authRequestError": {
+    "placeholders": {
+      "error": {"type": "String"}
+    }
+  },
   "accountStorageError": "Could not access local accounts: {error}",
   "@accountStorageError": {
     "placeholders": {
@@ -33,6 +44,18 @@
     }
   },
   "deckLoadError": "Saved decks could not be loaded. Restart the app before making changes.",
+  "supabaseDeckError": "Could not sync decks with Supabase: {error}",
+  "@supabaseDeckError": {
+    "placeholders": {
+      "error": {"type": "String"}
+    }
+  },
+  "supabaseInitError": "Could not connect to Supabase: {error}",
+  "@supabaseInitError": {
+    "placeholders": {
+      "error": {"type": "String"}
+    }
+  },
   "needAccount": "Need an account? Sign up",
   "haveAccount": "Already have an account? Sign in",
   "back": "Back",

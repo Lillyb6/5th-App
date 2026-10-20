@@ -11,8 +11,43 @@ import 'mockup.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
-void main() => runApp(const MyApp());
+const supabaseUrl = String.fromEnvironment(
+  'SUPABASE_URL',
+  defaultValue: 'https://regxvjrxgxynwlnqmusu.supabase.co',
+);
+const supabasePublishableKey = String.fromEnvironment(
+  'SUPABASE_PUBLISHABLE_KEY',
+  defaultValue: 'sb_publishable_8obXktLdXhvqDnH0r8SREQ_fFaGqV3X',
+);
+const supabaseConfigured = supabaseUrl != '' && supabasePublishableKey != '';
+
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  String? supabaseStartupError;
+  var supabaseEnabled = false;
+  if (supabaseUrl.isEmpty != supabasePublishableKey.isEmpty) {
+    supabaseStartupError =
+        'SUPABASE_URL and SUPABASE_PUBLISHABLE_KEY must both be configured.';
+  } else if (supabaseConfigured) {
+    try {
+      await Supabase.initialize(
+        url: supabaseUrl,
+        publishableKey: supabasePublishableKey,
+      );
+      supabaseEnabled = true;
+    } catch (error) {
+      supabaseStartupError = error.toString();
+    }
+  }
+  runApp(
+    MyApp(
+      supabaseEnabled: supabaseEnabled,
+      supabaseStartupError: supabaseStartupError,
+    ),
+  );
+}
 
 class Flashcard {
   Flashcard(this.term, this.answer);
@@ -153,8 +188,31 @@ List<Deck> demoDecks() => [
   ]),
 ];
 
+List<Deck> _starterDecks() => [
+  Deck('Biology essentials', [
+    Flashcard(
+      'Mitochondria',
+      'The organelles that produce most of a cell’s ATP.',
+    ),
+    Flashcard(
+      'Photosynthesis',
+      'The process plants use to convert light into chemical energy.',
+    ),
+    Flashcard(
+      'Osmosis',
+      'Movement of water across a selectively permeable membrane.',
+    ),
+  ]),
+];
+
 class MyApp extends StatefulWidget {
-  const MyApp({super.key});
+  const MyApp({
+    super.key,
+    this.supabaseEnabled = false,
+    this.supabaseStartupError,
+  });
+  final bool supabaseEnabled;
+  final String? supabaseStartupError;
 
   @override
   State<MyApp> createState() => _MyAppState();
@@ -270,7 +328,23 @@ class _MyAppState extends State<MyApp> {
             body: Center(child: Text(l10n.settingsLoadError(settingsError!))),
           );
         }
-        return EntryPage(onSettings: openSettings);
+        if (widget.supabaseStartupError != null) {
+          return Scaffold(
+            body: Center(
+              child: Padding(
+                padding: const EdgeInsets.all(24),
+                child: Text(
+                  l10n.supabaseInitError(widget.supabaseStartupError!),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ),
+          );
+        }
+        return EntryPage(
+          onSettings: openSettings,
+          supabaseEnabled: widget.supabaseEnabled,
+        );
       },
     ),
   );
@@ -375,12 +449,14 @@ class LibraryPage extends StatefulWidget {
     this.initialDecks,
     this.onSignOut,
     this.onSettings,
+    this.remoteUserId,
   });
   final String username;
   final String storageKey;
   final List<Deck>? initialDecks;
-  final VoidCallback? onSignOut;
+  final Future<void> Function()? onSignOut;
   final VoidCallback? onSettings;
+  final String? remoteUserId;
   @override
   State<LibraryPage> createState() => _LibraryPageState();
 }
@@ -389,7 +465,7 @@ class _LibraryPageState extends State<LibraryPage> {
   List<Deck> decks = [];
   bool loading = true;
   String search = '';
-  bool storageFailed = false;
+  String? storageFailure;
   Future<void> writes = Future.value();
   @override
   void initState() {
@@ -399,29 +475,30 @@ class _LibraryPageState extends State<LibraryPage> {
 
   Future<void> load() async {
     try {
-      final prefs = await SharedPreferences.getInstance();
-      final saved = prefs.getString(widget.storageKey);
-      decks = saved == null
-          ? widget.initialDecks ??
-                [
-                  Deck('Biology essentials', [
-                    Flashcard(
-                      'Mitochondria',
-                      'The organelles that produce most of a cell’s ATP.',
-                    ),
-                    Flashcard(
-                      'Photosynthesis',
-                      'The process plants use to convert light into chemical energy.',
-                    ),
-                    Flashcard(
-                      'Osmosis',
-                      'Movement of water across a selectively permeable membrane.',
-                    ),
-                  ]),
-                ]
-          : (jsonDecode(saved) as List).map((d) => Deck.fromJson(d)).toList();
-    } catch (_) {
-      storageFailed = true;
+      if (widget.remoteUserId case final userId?) {
+        final record = await Supabase.instance.client
+            .from('user_deck_data')
+            .select('decks')
+            .eq('user_id', userId)
+            .maybeSingle();
+        final saved = record?['decks'];
+        decks = saved is List
+            ? saved
+                  .map(
+                    (deck) =>
+                        Deck.fromJson(Map<String, dynamic>.from(deck as Map)),
+                  )
+                  .toList()
+            : widget.initialDecks ?? _starterDecks();
+      } else {
+        final prefs = await SharedPreferences.getInstance();
+        final saved = prefs.getString(widget.storageKey);
+        decks = saved == null
+            ? widget.initialDecks ?? _starterDecks()
+            : (jsonDecode(saved) as List).map((d) => Deck.fromJson(d)).toList();
+      }
+    } catch (error) {
+      storageFailure = error.toString();
     }
     if (mounted) {
       setState(() => loading = false);
@@ -434,16 +511,30 @@ class _LibraryPageState extends State<LibraryPage> {
     final l10n = AppLocalizations.of(context)!;
     writes = writes.then((_) async {
       try {
-        final prefs = await SharedPreferences.getInstance();
-        if (!await prefs.setString(widget.storageKey, snapshot)) {
-          throw StateError('Save failed');
+        if (widget.remoteUserId case final userId?) {
+          await Supabase.instance.client.from('user_deck_data').upsert({
+            'user_id': userId,
+            'decks': jsonDecode(snapshot),
+            'updated_at': DateTime.now().toUtc().toIso8601String(),
+          });
+        } else {
+          final prefs = await SharedPreferences.getInstance();
+          if (!await prefs.setString(widget.storageKey, snapshot)) {
+            throw StateError('Save failed');
+          }
         }
       } catch (error) {
         if (!mounted) {
           return;
         }
         messenger.showSnackBar(
-          SnackBar(content: Text('${l10n.saveError} $error')),
+          SnackBar(
+            content: Text(
+              widget.remoteUserId == null
+                  ? '${l10n.saveError} $error'
+                  : l10n.supabaseDeckError(error.toString()),
+            ),
+          ),
         );
       }
     });
@@ -540,7 +631,20 @@ class _LibraryPageState extends State<LibraryPage> {
           if (widget.onSignOut != null)
             IconButton(
               tooltip: l10n.signOut,
-              onPressed: widget.onSignOut,
+              onPressed: () async {
+                try {
+                  await widget.onSignOut!();
+                } catch (error) {
+                  if (!context.mounted) {
+                    return;
+                  }
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(l10n.authRequestError(error.toString())),
+                    ),
+                  );
+                }
+              },
               icon: const Icon(Icons.logout),
             ),
           IconButton(
@@ -550,7 +654,7 @@ class _LibraryPageState extends State<LibraryPage> {
           ),
           IconButton(
             tooltip: l10n.importDeckTooltip,
-            onPressed: loading || storageFailed ? null : importDeck,
+            onPressed: loading || storageFailure != null ? null : importDeck,
             icon: const Icon(Icons.file_download_outlined),
           ),
           const SizedBox(width: 12),
@@ -558,11 +662,15 @@ class _LibraryPageState extends State<LibraryPage> {
       ),
       body: loading
           ? const Center(child: CircularProgressIndicator())
-          : storageFailed
+          : storageFailure != null
           ? Center(
               child: Padding(
                 padding: const EdgeInsets.all(24),
-                child: Text(l10n.deckLoadError),
+                child: Text(
+                  widget.remoteUserId == null
+                      ? l10n.deckLoadError
+                      : l10n.supabaseDeckError(storageFailure!),
+                ),
               ),
             )
           : Center(

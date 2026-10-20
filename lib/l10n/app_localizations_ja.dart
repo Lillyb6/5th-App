@@ -16,6 +16,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get demoCredentials => 'デモアカウントを試す: demo / studyspace123';
 
   @override
+  String get supabaseSignInHint => 'ログインまたはアカウントを作成して、デッキをSupabaseと同期します。';
+
+  @override
   String get signIn => 'ログイン';
 
   @override
@@ -29,7 +32,14 @@ class AppLocalizationsJa extends AppLocalizations {
       'アカウントとデッキはこの端末にのみ保存されます。この試作版ではサーバー認証や同期は行いません。';
 
   @override
+  String get supabaseNotice =>
+      'ゲストのデッキはこの端末に保存されます。ログイン中のアカウントのデッキはSupabaseと同期されます。';
+
+  @override
   String get username => 'ユーザー名';
+
+  @override
+  String get email => 'メールアドレス';
 
   @override
   String get password => 'パスワード';
@@ -53,6 +63,17 @@ class AppLocalizationsJa extends AppLocalizations {
   String get invalidCredentials => 'ユーザー名またはパスワードが正しくありません。';
 
   @override
+  String get emailInvalid => '有効なメールアドレスを入力してください';
+
+  @override
+  String get emailConfirmation => 'メールを確認してアカウントを認証してからログインしてください。';
+
+  @override
+  String authRequestError(String error) {
+    return 'アカウントのリクエストを完了できませんでした: $error';
+  }
+
+  @override
   String accountStorageError(String error) {
     return 'ローカルアカウントにアクセスできません: $error';
   }
@@ -69,6 +90,16 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get deckLoadError => '保存済みデッキを読み込めませんでした。変更する前にアプリを再起動してください。';
+
+  @override
+  String supabaseDeckError(String error) {
+    return 'Supabaseとデッキを同期できませんでした: $error';
+  }
+
+  @override
+  String supabaseInitError(String error) {
+    return 'Supabaseに接続できませんでした: $error';
+  }
 
   @override
   String get needAccount => 'アカウントをお持ちでない場合は登録';

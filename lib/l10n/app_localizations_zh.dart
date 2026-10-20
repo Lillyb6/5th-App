@@ -16,6 +16,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get demoCredentials => '试用演示账号：demo / studyspace123';
 
   @override
+  String get supabaseSignInHint => '登录或创建账号以将卡组同步到 Supabase。';
+
+  @override
   String get signIn => '登录';
 
   @override
@@ -28,7 +31,13 @@ class AppLocalizationsZh extends AppLocalizations {
   String get localOnlyNotice => '账号和卡组仅保存在此设备上。此原型不使用服务器进行身份验证或同步。';
 
   @override
+  String get supabaseNotice => '访客卡组仅保存在此设备上。登录账号的卡组会与 Supabase 同步。';
+
+  @override
   String get username => '用户名';
+
+  @override
+  String get email => '电子邮箱';
 
   @override
   String get password => '密码';
@@ -52,6 +61,17 @@ class AppLocalizationsZh extends AppLocalizations {
   String get invalidCredentials => '用户名或密码错误。';
 
   @override
+  String get emailInvalid => '请输入有效的电子邮箱地址';
+
+  @override
+  String get emailConfirmation => '请检查邮箱并确认账号，然后登录。';
+
+  @override
+  String authRequestError(String error) {
+    return '无法完成账号请求：$error';
+  }
+
+  @override
   String accountStorageError(String error) {
     return '无法访问本地账号：$error';
   }
@@ -68,6 +88,16 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get deckLoadError => '无法加载已保存的卡组。请重启应用后再进行更改。';
+
+  @override
+  String supabaseDeckError(String error) {
+    return '无法与 Supabase 同步卡组：$error';
+  }
+
+  @override
+  String supabaseInitError(String error) {
+    return '无法连接到 Supabase：$error';
+  }
 
   @override
   String get needAccount => '还没有账号？注册';

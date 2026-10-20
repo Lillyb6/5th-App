@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'l10n/app_localizations.dart';
 import 'main.dart';
@@ -8,8 +9,13 @@ const ink = Color(0xff4338ca);
 enum _EntryMode { welcome, signIn, signUp }
 
 class EntryPage extends StatefulWidget {
-  const EntryPage({super.key, required this.onSettings});
+  const EntryPage({
+    super.key,
+    required this.onSettings,
+    this.supabaseEnabled = false,
+  });
   final VoidCallback onSettings;
+  final bool supabaseEnabled;
   @override
   State<EntryPage> createState() => _EntryPageState();
 }
@@ -20,6 +26,23 @@ class _EntryPageState extends State<EntryPage> {
   final confirmPassword = TextEditingController();
   final form = GlobalKey<FormState>();
   _EntryMode mode = _EntryMode.welcome;
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.supabaseEnabled) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        final user = Supabase.instance.client.auth.currentUser;
+        if (mounted && user != null) {
+          openLibrary(
+            username: user.email?.split('@').first ?? user.id,
+            storageKey: '',
+            remoteUserId: user.id,
+          );
+        }
+      });
+    }
+  }
 
   @override
   void dispose() {
@@ -33,6 +56,7 @@ class _EntryPageState extends State<EntryPage> {
     required String username,
     required String storageKey,
     List<Deck>? initialDecks,
+    String? remoteUserId,
   }) {
     final navigator = Navigator.of(context);
     navigator.pushReplacement(
@@ -41,13 +65,22 @@ class _EntryPageState extends State<EntryPage> {
           username: username,
           storageKey: storageKey,
           initialDecks: initialDecks,
+          remoteUserId: remoteUserId,
           onSettings: widget.onSettings,
-          onSignOut: () => navigator.pushAndRemoveUntil(
-            MaterialPageRoute(
-              builder: (_) => EntryPage(onSettings: widget.onSettings),
-            ),
-            (_) => false,
-          ),
+          onSignOut: () async {
+            if (widget.supabaseEnabled) {
+              await Supabase.instance.client.auth.signOut();
+            }
+            navigator.pushAndRemoveUntil(
+              MaterialPageRoute(
+                builder: (_) => EntryPage(
+                  onSettings: widget.onSettings,
+                  supabaseEnabled: widget.supabaseEnabled,
+                ),
+              ),
+              (_) => false,
+            );
+          },
         ),
       ),
     );
@@ -63,6 +96,34 @@ class _EntryPageState extends State<EntryPage> {
     }
     final username = user.text.trim();
     try {
+      if (widget.supabaseEnabled) {
+        final client = Supabase.instance.client;
+        final response = mode == _EntryMode.signUp
+            ? await client.auth.signUp(email: username, password: password.text)
+            : await client.auth.signInWithPassword(
+                email: username,
+                password: password.text,
+              );
+        if (!mounted) {
+          return;
+        }
+        final signedInUser = response.user;
+        if (signedInUser == null) {
+          showMessage(l10n.invalidCredentials);
+          return;
+        }
+        if (response.session == null) {
+          showMessage(l10n.emailConfirmation);
+          setState(() => mode = _EntryMode.signIn);
+          return;
+        }
+        openLibrary(
+          username: signedInUser.email?.split('@').first ?? signedInUser.id,
+          storageKey: '',
+          remoteUserId: signedInUser.id,
+        );
+        return;
+      }
       if (mode == _EntryMode.signUp) {
         final created = await LocalAccounts.register(username, password.text);
         if (!created) {
@@ -87,7 +148,11 @@ class _EntryPageState extends State<EntryPage> {
         showMessage(l10n.invalidCredentials);
       }
     } catch (error) {
-      showMessage(l10n.accountStorageError(error.toString()));
+      showMessage(
+        widget.supabaseEnabled
+            ? l10n.authRequestError(error.toString())
+            : l10n.accountStorageError(error.toString()),
+      );
     }
   }
 
@@ -147,7 +212,12 @@ class _EntryPageState extends State<EntryPage> {
                   Text(l10n.tagline),
                   const SizedBox(height: 32),
                   if (mode == _EntryMode.welcome) ...[
-                    Text(l10n.demoCredentials, textAlign: TextAlign.center),
+                    Text(
+                      widget.supabaseEnabled
+                          ? l10n.supabaseSignInHint
+                          : l10n.demoCredentials,
+                      textAlign: TextAlign.center,
+                    ),
                     const SizedBox(height: 16),
                     SizedBox(
                       width: double.infinity,
@@ -172,7 +242,12 @@ class _EntryPageState extends State<EntryPage> {
                       child: Text(l10n.continueAsGuest),
                     ),
                     const SizedBox(height: 12),
-                    Text(l10n.localOnlyNotice, textAlign: TextAlign.center),
+                    Text(
+                      widget.supabaseEnabled
+                          ? l10n.supabaseNotice
+                          : l10n.localOnlyNotice,
+                      textAlign: TextAlign.center,
+                    ),
                   ] else ...[
                     Form(
                       key: form,
@@ -181,12 +256,23 @@ class _EntryPageState extends State<EntryPage> {
                           TextFormField(
                             controller: user,
                             textInputAction: TextInputAction.next,
-                            validator: (value) =>
-                                value == null || value.trim().length < 3
-                                ? l10n.minimumUsername
-                                : null,
+                            validator: (value) {
+                              if (value == null || value.trim().length < 3) {
+                                return widget.supabaseEnabled
+                                    ? l10n.emailInvalid
+                                    : l10n.minimumUsername;
+                              }
+                              if (widget.supabaseEnabled &&
+                                  (!value.contains('@') ||
+                                      !value.split('@').last.contains('.'))) {
+                                return l10n.emailInvalid;
+                              }
+                              return null;
+                            },
                             decoration: InputDecoration(
-                              labelText: l10n.username,
+                              labelText: widget.supabaseEnabled
+                                  ? l10n.email
+                                  : l10n.username,
                               prefixIcon: Icon(Icons.person_outline),
                             ),
                           ),

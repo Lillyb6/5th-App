@@ -16,6 +16,10 @@ class AppLocalizationsDe extends AppLocalizations {
   String get demoCredentials => 'Demo-Konto ausprobieren: demo / studyspace123';
 
   @override
+  String get supabaseSignInHint =>
+      'Melde dich an oder erstelle ein Konto, um deine Kartensätze mit Supabase zu synchronisieren.';
+
+  @override
   String get signIn => 'Anmelden';
 
   @override
@@ -29,7 +33,14 @@ class AppLocalizationsDe extends AppLocalizations {
       'Konten und Kartensätze werden nur auf diesem Gerät gespeichert. Diese Vorschau verwendet keine Serveranmeldung oder Synchronisierung.';
 
   @override
+  String get supabaseNotice =>
+      'Gast-Kartensätze bleiben auf diesem Gerät. Kartensätze angemeldeter Konten werden mit Supabase synchronisiert.';
+
+  @override
   String get username => 'Benutzername';
+
+  @override
+  String get email => 'E-Mail-Adresse';
 
   @override
   String get password => 'Passwort';
@@ -55,6 +66,18 @@ class AppLocalizationsDe extends AppLocalizations {
   String get invalidCredentials => 'Benutzername oder Passwort ist falsch.';
 
   @override
+  String get emailInvalid => 'Gib eine gültige E-Mail-Adresse ein';
+
+  @override
+  String get emailConfirmation =>
+      'Prüfe deine E-Mail, um dein Konto zu bestätigen, und melde dich dann an.';
+
+  @override
+  String authRequestError(String error) {
+    return 'Die Kontoanfrage konnte nicht abgeschlossen werden: $error';
+  }
+
+  @override
   String accountStorageError(String error) {
     return 'Auf lokale Konten konnte nicht zugegriffen werden: $error';
   }
@@ -72,6 +95,16 @@ class AppLocalizationsDe extends AppLocalizations {
   @override
   String get deckLoadError =>
       'Gespeicherte Kartensätze konnten nicht geladen werden. Starte die App neu, bevor du Änderungen vornimmst.';
+
+  @override
+  String supabaseDeckError(String error) {
+    return 'Kartensätze konnten nicht mit Supabase synchronisiert werden: $error';
+  }
+
+  @override
+  String supabaseInitError(String error) {
+    return 'Verbindung zu Supabase fehlgeschlagen: $error';
+  }
 
   @override
   String get needAccount => 'Noch kein Konto? Registrieren';
