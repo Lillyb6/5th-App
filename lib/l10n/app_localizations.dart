@@ -761,6 +761,144 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Break complete. Ready to focus again?'**
   String get breakComplete;
+
+  /// No description provided for @home.
+  ///
+  /// In en, this message translates to:
+  /// **'Home'**
+  String get home;
+
+  /// No description provided for @library.
+  ///
+  /// In en, this message translates to:
+  /// **'Library'**
+  String get library;
+
+  /// No description provided for @yourLearningCorner.
+  ///
+  /// In en, this message translates to:
+  /// **'YOUR LITTLE LEARNING CORNER'**
+  String get yourLearningCorner;
+
+  /// No description provided for @homeDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'A cozy corner for curious minds. A few cards, a little focus, a brighter you.'**
+  String get homeDescription;
+
+  /// No description provided for @decksCreated.
+  ///
+  /// In en, this message translates to:
+  /// **'Decks created'**
+  String get decksCreated;
+
+  /// No description provided for @statMinutesStudied.
+  ///
+  /// In en, this message translates to:
+  /// **'Minutes studied'**
+  String get statMinutesStudied;
+
+  /// No description provided for @flashcardsCompleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Flashcards completed'**
+  String get flashcardsCompleted;
+
+  /// No description provided for @makeALittleProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'Make a little progress today'**
+  String get makeALittleProgress;
+
+  /// No description provided for @beginStudyingHome.
+  ///
+  /// In en, this message translates to:
+  /// **'Begin Studying!'**
+  String get beginStudyingHome;
+
+  /// No description provided for @chooseYourRhythm.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick a deck. Find your rhythm.'**
+  String get chooseYourRhythm;
+
+  /// No description provided for @createNewDeck.
+  ///
+  /// In en, this message translates to:
+  /// **'Create new deck'**
+  String get createNewDeck;
+
+  /// No description provided for @libraryShortcut.
+  ///
+  /// In en, this message translates to:
+  /// **'All your knowledge, in one place.'**
+  String get libraryShortcut;
+
+  /// No description provided for @createShortcut.
+  ///
+  /// In en, this message translates to:
+  /// **'Give your next big idea a home.'**
+  String get createShortcut;
+
+  /// No description provided for @smallSteps.
+  ///
+  /// In en, this message translates to:
+  /// **'Small steps. Big lightbulb moments.'**
+  String get smallSteps;
+
+  /// No description provided for @libraryDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Your growing collection of little discoveries.'**
+  String get libraryDescription;
+
+  /// No description provided for @studySession.
+  ///
+  /// In en, this message translates to:
+  /// **'Study session'**
+  String get studySession;
+
+  /// No description provided for @findYourFlow.
+  ///
+  /// In en, this message translates to:
+  /// **'Find your flow.'**
+  String get findYourFlow;
+
+  /// No description provided for @timerIntro.
+  ///
+  /// In en, this message translates to:
+  /// **'A little focus goes a long way. Choose your pace.'**
+  String get timerIntro;
+
+  /// No description provided for @chooseTimer.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose your timer'**
+  String get chooseTimer;
+
+  /// No description provided for @flowtimeShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Flowtime'**
+  String get flowtimeShort;
+
+  /// No description provided for @pomodoroDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'One focused session at a time. Set your countdown and settle in.'**
+  String get pomodoroDescription;
+
+  /// No description provided for @focusSession.
+  ///
+  /// In en, this message translates to:
+  /// **'FOCUS SESSION'**
+  String get focusSession;
+
+  /// No description provided for @beginStudying.
+  ///
+  /// In en, this message translates to:
+  /// **'Begin studying'**
+  String get beginStudying;
 }
 
 class _AppLocalizationsDelegate

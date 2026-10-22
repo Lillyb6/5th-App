@@ -391,4 +391,76 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get breakComplete => 'Pause beendet. Bereit zum Weiterlernen?';
+
+  @override
+  String get home => 'Start';
+
+  @override
+  String get library => 'Bibliothek';
+
+  @override
+  String get yourLearningCorner => 'DEINE KLEINE LERNECKE';
+
+  @override
+  String get homeDescription =>
+      'Ein gemütlicher Ort für neugierige Köpfe. Ein paar Karten, etwas Fokus und neue Erkenntnisse.';
+
+  @override
+  String get decksCreated => 'Erstellte Decks';
+
+  @override
+  String get statMinutesStudied => 'Gelernte Minuten';
+
+  @override
+  String get flashcardsCompleted => 'Bearbeitete Lernkarten';
+
+  @override
+  String get makeALittleProgress => 'Heute ein kleines Stück weiter';
+
+  @override
+  String get beginStudyingHome => 'Lernen beginnen!';
+
+  @override
+  String get chooseYourRhythm => 'Wähle ein Deck. Finde deinen Rhythmus.';
+
+  @override
+  String get createNewDeck => 'Neues Deck erstellen';
+
+  @override
+  String get libraryShortcut => 'Dein Wissen an einem Ort.';
+
+  @override
+  String get createShortcut => 'Ein Zuhause für deine nächste große Idee.';
+
+  @override
+  String get smallSteps => 'Kleine Schritte. Große Aha-Momente.';
+
+  @override
+  String get libraryDescription =>
+      'Deine wachsende Sammlung kleiner Entdeckungen.';
+
+  @override
+  String get studySession => 'Lernsitzung';
+
+  @override
+  String get findYourFlow => 'Finde deinen Rhythmus.';
+
+  @override
+  String get timerIntro => 'Ein wenig Fokus bringt viel. Wähle dein Tempo.';
+
+  @override
+  String get chooseTimer => 'Wähle deinen Timer';
+
+  @override
+  String get flowtimeShort => 'Flowtime';
+
+  @override
+  String get pomodoroDescription =>
+      'Eine Lernphase nach der anderen. Stelle den Countdown ein und leg los.';
+
+  @override
+  String get focusSession => 'KONZENTRATIONSPHASE';
+
+  @override
+  String get beginStudying => 'Lernen beginnen';
 }

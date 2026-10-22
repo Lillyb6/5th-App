@@ -377,4 +377,73 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get breakComplete => '休憩終了。学習を再開しましょう。';
+
+  @override
+  String get home => 'ホーム';
+
+  @override
+  String get library => 'ライブラリ';
+
+  @override
+  String get yourLearningCorner => 'あなただけの学びの場所';
+
+  @override
+  String get homeDescription => '好奇心のための居心地のよい場所。数枚のカードと少しの集中で、新しい自分へ。';
+
+  @override
+  String get decksCreated => '作成したデッキ';
+
+  @override
+  String get statMinutesStudied => '学習時間（分）';
+
+  @override
+  String get flashcardsCompleted => '完了したカード';
+
+  @override
+  String get makeALittleProgress => '今日も少しずつ前へ';
+
+  @override
+  String get beginStudyingHome => '学習を始めよう！';
+
+  @override
+  String get chooseYourRhythm => 'デッキを選んで、自分のリズムで。';
+
+  @override
+  String get createNewDeck => '新しいデッキを作成';
+
+  @override
+  String get libraryShortcut => 'あなたの知識をひとつの場所に。';
+
+  @override
+  String get createShortcut => '次の大きなアイデアの居場所。';
+
+  @override
+  String get smallSteps => '小さな一歩。大きなひらめき。';
+
+  @override
+  String get libraryDescription => '少しずつ増える発見のコレクション。';
+
+  @override
+  String get studySession => '学習セッション';
+
+  @override
+  String get findYourFlow => '自分のリズムを見つけよう。';
+
+  @override
+  String get timerIntro => '少しの集中で、大きな前進。ペースを選びましょう。';
+
+  @override
+  String get chooseTimer => 'タイマーを選択';
+
+  @override
+  String get flowtimeShort => 'Flowtime';
+
+  @override
+  String get pomodoroDescription => '一度にひとつの集中時間。カウントダウンを設定して始めましょう。';
+
+  @override
+  String get focusSession => '集中セッション';
+
+  @override
+  String get beginStudying => '学習を開始';
 }

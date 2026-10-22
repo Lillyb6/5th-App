@@ -24,6 +24,7 @@ Future<void> openLibrary(WidgetTester tester) async {
   await tester.pumpWidget(const MyApp());
   await tester.pumpAndSettle();
   await tap(tester, find.text('Continue as guest'));
+  await tap(tester, find.text('Library'));
 }
 
 Future<void> openStudy(
@@ -105,25 +106,26 @@ void main() {
     );
   });
 
-  testWidgets('Tap flips and swipes grade cards; retry includes only missed cards', (
-    tester,
-  ) async {
-    await prepare(tester);
-    await openStudy(tester);
-    await tap(tester, find.text('Greeting'));
-    expect(find.text('Hello world'), findsOneWidget);
-    await tap(tester, find.text('Got it'));
-    await tester.drag(find.text('Farewell'), const Offset(-200, 0));
-    await tester.pumpAndSettle();
-    expect(find.text('1 of 2 remembered'), findsOneWidget);
-    await tap(tester, find.text('Retry 1 missed cards'));
-    expect(find.text('Farewell'), findsAtLeastNWidgets(1));
-    expect(find.text('Greeting'), findsNothing);
-    await tap(tester, find.text('Farewell'));
-    await tap(tester, find.text('Got it'));
-    expect(find.text('1 of 1 remembered'), findsOneWidget);
-    expect(find.textContaining('missed cards'), findsNothing);
-  });
+  testWidgets(
+    'Tap flips and swipes grade cards; retry includes only missed cards',
+    (tester) async {
+      await prepare(tester);
+      await openStudy(tester);
+      await tap(tester, find.text('Greeting'));
+      expect(find.text('Hello world'), findsOneWidget);
+      await tap(tester, find.text('Got it'));
+      await tester.drag(find.text('Farewell'), const Offset(-200, 0));
+      await tester.pumpAndSettle();
+      expect(find.text('1 of 2 remembered'), findsOneWidget);
+      await tap(tester, find.text('Retry 1 missed cards'));
+      expect(find.text('Farewell'), findsAtLeastNWidgets(1));
+      expect(find.text('Greeting'), findsNothing);
+      await tap(tester, find.text('Farewell'));
+      await tap(tester, find.text('Got it'));
+      expect(find.text('1 of 1 remembered'), findsOneWidget);
+      expect(find.textContaining('missed cards'), findsNothing);
+    },
+  );
 
   testWidgets('Multiple-choice quiz retries only incorrect answers', (
     tester,

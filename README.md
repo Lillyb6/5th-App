@@ -4,6 +4,10 @@ A Flutter flashcard study app based on the Trello brainstorm.
 
 ## Available now
 
+- A navy and indigo dark theme by default, with bundled Manrope typography.
+- A Study Space home page with saved deck, study-minute, and completed-flashcard stats, plus shortcuts to the library, studying, and deck creation.
+- Three aligned timer choices with a highlighted selection and a separate Begin studying action.
+
 - Create and edit decks and cards; search the library.
 - Save decks and accumulated study time on the current device.
 - Tap to flip flashcards; swipe right for Got it or left for Still learning, or use the buttons.

@@ -21,6 +21,9 @@ void main() {
     await tester.tap(find.text('Continue as guest'));
     await tester.pumpAndSettle();
     expect(find.text('Hi, Guest'), findsOneWidget);
+    await tester.ensureVisible(find.text('Library'));
+    await tester.tap(find.text('Library'));
+    await tester.pumpAndSettle();
     expect(find.text('Biology essentials'), findsOneWidget);
   });
 
@@ -36,6 +39,9 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('Hi, demo'), findsOneWidget);
+    await tester.ensureVisible(find.text('Library'));
+    await tester.tap(find.text('Library'));
+    await tester.pumpAndSettle();
     expect(find.text('Earth Science'), findsOneWidget);
     expect(find.text('American Classic Literature'), findsOneWidget);
     expect(find.text('Biology essentials'), findsNothing);
@@ -55,6 +61,9 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('Hi, reader'), findsOneWidget);
+    await tester.ensureVisible(find.text('Library'));
+    await tester.tap(find.text('Library'));
+    await tester.pumpAndSettle();
     expect(find.text('Biology essentials'), findsOneWidget);
 
     await tester.tap(find.byTooltip('Sign out'));
@@ -69,7 +78,7 @@ void main() {
     await tester.pumpWidget(const SizedBox());
   });
 
-  testWidgets('Language and dark mode choices persist after restart', (
+  testWidgets('Language and light mode choices persist after restart', (
     tester,
   ) async {
     await prepare(tester);
@@ -88,7 +97,7 @@ void main() {
     await tester.pumpAndSettle();
     expect(
       tester.widget<MaterialApp>(find.byType(MaterialApp)).themeMode,
-      ThemeMode.dark,
+      ThemeMode.light,
     );
 
     await tester.pumpWidget(const SizedBox());
@@ -97,7 +106,7 @@ void main() {
     expect(find.text('Haz un poco de espacio para aprender.'), findsOneWidget);
     expect(
       tester.widget<MaterialApp>(find.byType(MaterialApp)).themeMode,
-      ThemeMode.dark,
+      ThemeMode.light,
     );
   });
 }

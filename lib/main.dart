@@ -7,6 +7,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 
 import 'l10n/app_localizations.dart';
 import 'mockup.dart';
+import 'app_theme.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -57,14 +58,16 @@ class Flashcard {
 }
 
 class Deck {
-  Deck(this.title, this.cards, {this.seconds = 0});
+  Deck(this.title, this.cards, {this.seconds = 0, this.completedCards = 0});
   String title;
   List<Flashcard> cards;
   int seconds;
+  int completedCards;
   Map<String, dynamic> toJson() => {
     'title': title,
     'cards': cards.map((c) => c.toJson()).toList(),
     'seconds': seconds,
+    'completedCards': completedCards,
   };
   factory Deck.fromJson(Map<String, dynamic> json) => Deck(
     json['title'] as String,
@@ -72,6 +75,7 @@ class Deck {
         .map((c) => Flashcard(c['term'] as String, c['answer'] as String))
         .toList(),
     seconds: json['seconds'] as int? ?? 0,
+    completedCards: json['completedCards'] as int? ?? 0,
   );
 }
 
@@ -223,7 +227,7 @@ class _MyAppState extends State<MyApp> {
   static const _darkModeKey = 'studyspace.dark-mode.v1';
   final navigatorKey = GlobalKey<NavigatorState>();
   Locale selectedLocale = const Locale('en');
-  ThemeMode themeMode = ThemeMode.light;
+  ThemeMode themeMode = ThemeMode.dark;
   bool settingsLoaded = false;
   String? settingsError;
 
@@ -240,7 +244,7 @@ class _MyAppState extends State<MyApp> {
       const supported = {'en', 'es', 'vi', 'zh', 'ja', 'nl', 'de'};
       setState(() {
         selectedLocale = Locale(supported.contains(language) ? language : 'en');
-        themeMode = prefs.getBool(_darkModeKey) ?? false
+        themeMode = prefs.getBool(_darkModeKey) ?? true
             ? ThemeMode.dark
             : ThemeMode.light;
         settingsLoaded = true;
@@ -296,24 +300,8 @@ class _MyAppState extends State<MyApp> {
       GlobalWidgetsLocalizations.delegate,
       GlobalCupertinoLocalizations.delegate,
     ],
-    theme: ThemeData(
-      colorScheme: ColorScheme.fromSeed(seedColor: ink),
-      scaffoldBackgroundColor: const Color(0xfff8f9ff),
-      useMaterial3: true,
-      inputDecorationTheme: const InputDecorationTheme(
-        border: OutlineInputBorder(),
-      ),
-    ),
-    darkTheme: ThemeData(
-      colorScheme: ColorScheme.fromSeed(
-        seedColor: ink,
-        brightness: Brightness.dark,
-      ),
-      useMaterial3: true,
-      inputDecorationTheme: const InputDecorationTheme(
-        border: OutlineInputBorder(),
-      ),
-    ),
+    theme: studySpaceTheme(Brightness.light),
+    darkTheme: studySpaceTheme(Brightness.dark),
     themeMode: themeMode,
     home: Builder(
       builder: (context) {
@@ -465,6 +453,7 @@ class _LibraryPageState extends State<LibraryPage> {
   List<Deck> decks = [];
   bool loading = true;
   String search = '';
+  bool showLibrary = false;
   String? storageFailure;
   Future<void> writes = Future.value();
   @override
@@ -580,6 +569,21 @@ class _LibraryPageState extends State<LibraryPage> {
     }
   }
 
+  Future<void> chooseTimer() async {
+    await Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => TimerChoicePage(
+          decks: decks,
+          onStudy: (deck, minutes, mode) =>
+              study(deck, false, minutes: minutes, timerMode: mode),
+        ),
+      ),
+    );
+    if (mounted) {
+      setState(() {});
+    }
+  }
+
   Future<void> importDeck() async {
     final l10n = AppLocalizations.of(context)!;
     final input = TextEditingController();
@@ -630,230 +634,229 @@ class _LibraryPageState extends State<LibraryPage> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('StudySpace'),
-        actions: [
-          if (widget.onSignOut != null)
-            IconButton(
-              tooltip: l10n.signOut,
-              onPressed: () async {
-                try {
-                  await widget.onSignOut!();
-                } catch (error) {
-                  if (!context.mounted) {
-                    return;
+    return PopScope(
+      canPop: !showLibrary,
+      onPopInvokedWithResult: (didPop, result) {
+        if (!didPop && showLibrary) setState(() => showLibrary = false);
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          leading: showLibrary
+              ? IconButton(
+                  tooltip: l10n.home,
+                  onPressed: () => setState(() => showLibrary = false),
+                  icon: const Icon(Icons.arrow_back_rounded),
+                )
+              : const Padding(
+                  padding: EdgeInsets.all(16),
+                  child: Icon(Icons.auto_awesome_rounded),
+                ),
+          title: Text(showLibrary ? l10n.library : 'Study Space'),
+          actions: [
+            if (widget.onSignOut != null)
+              IconButton(
+                tooltip: l10n.signOut,
+                onPressed: () async {
+                  try {
+                    await widget.onSignOut!();
+                  } catch (error) {
+                    if (!context.mounted) {
+                      return;
+                    }
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(l10n.authRequestError(error.toString())),
+                      ),
+                    );
                   }
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(l10n.authRequestError(error.toString())),
-                    ),
-                  );
-                }
-              },
-              icon: const Icon(Icons.logout),
-            ),
-          IconButton(
-            tooltip: l10n.settings,
-            onPressed: widget.onSettings,
-            icon: const Icon(Icons.settings_outlined),
-          ),
-          IconButton(
-            tooltip: l10n.importDeckTooltip,
-            onPressed: loading || storageFailure != null ? null : importDeck,
-            icon: const Icon(Icons.file_download_outlined),
-          ),
-          const SizedBox(width: 12),
-        ],
-      ),
-      body: loading
-          ? const Center(child: CircularProgressIndicator())
-          : storageFailure != null
-          ? Center(
-              child: Padding(
-                padding: const EdgeInsets.all(24),
-                child: Text(
-                  widget.remoteUserId == null
-                      ? l10n.deckLoadError
-                      : l10n.supabaseDeckError(storageFailure!),
-                ),
+                },
+                icon: const Icon(Icons.logout),
               ),
-            )
-          : Center(
-              child: ConstrainedBox(
-                constraints: const BoxConstraints(maxWidth: 480),
-                child: ListView(
-                  padding: const EdgeInsets.fromLTRB(24, 24, 24, 100),
-                  children: [
-                    Text(
-                      l10n.hiUser(widget.username),
-                      style: Theme.of(context).textTheme.headlineSmall,
-                    ),
-                    HomeActions(
-                      onCreate: () => edit(),
-                      onTimer: () async {
-                        await Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (_) => TimerChoicePage(
-                              decks: decks,
-                              onStudy: (deck, minutes, mode) => study(
-                                deck,
-                                false,
-                                minutes: minutes,
-                                timerMode: mode,
-                              ),
-                            ),
-                          ),
-                        );
-                        if (mounted) {
-                          setState(() {});
-                        }
-                      },
-                    ),
-                    Wrap(
-                      spacing: 12,
-                      runSpacing: 12,
-                      children: [
-                        Chip(
-                          label: Text(l10n.deckCount(decks.length)),
-                          avatar: const Icon(Icons.style_outlined),
-                        ),
-                        Chip(
-                          label: Text(
-                            l10n.flashcardCount(
-                              decks.fold<int>(0, (n, d) => n + d.cards.length),
-                            ),
-                          ),
-                        ),
-                        Chip(
-                          label: Text(
-                            l10n.minutesStudied(
-                              decks.fold<int>(0, (n, d) => n + d.seconds) ~/ 60,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 24),
-                    TextField(
-                      onChanged: (value) => setState(() => search = value),
-                      decoration: InputDecoration(
-                        prefixIcon: Icon(Icons.search),
-                        hintText: l10n.searchDecks,
+            IconButton(
+              tooltip: l10n.settings,
+              onPressed: widget.onSettings,
+              icon: const Icon(Icons.settings_outlined),
+            ),
+            if (showLibrary)
+              IconButton(
+                tooltip: l10n.importDeckTooltip,
+                onPressed: loading || storageFailure != null
+                    ? null
+                    : importDeck,
+                icon: const Icon(Icons.file_download_outlined),
+              ),
+            const SizedBox(width: 12),
+          ],
+        ),
+        floatingActionButton: showLibrary && !loading && storageFailure == null
+            ? FloatingActionButton.extended(
+                tooltip: l10n.createDeck,
+                onPressed: () => edit(),
+                icon: const Icon(Icons.add),
+                label: Text(l10n.createNewDeck),
+              )
+            : null,
+        body: loading
+            ? const Center(child: CircularProgressIndicator())
+            : storageFailure != null
+            ? Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(24),
+                  child: Text(
+                    widget.remoteUserId == null
+                        ? l10n.deckLoadError
+                        : l10n.supabaseDeckError(storageFailure!),
+                  ),
+                ),
+              )
+            : !showLibrary
+            ? StudyHome(
+                username: widget.username,
+                decks: decks,
+                onLibrary: () => setState(() => showLibrary = true),
+                onStudy: chooseTimer,
+                onCreate: () => edit(),
+              )
+            : Center(
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: 760),
+                  child: ListView(
+                    padding: const EdgeInsets.fromLTRB(24, 24, 24, 100),
+                    children: [
+                      Text(
+                        l10n.yourLibrary,
+                        style: Theme.of(context).textTheme.headlineLarge,
                       ),
-                    ),
-                    const SizedBox(height: 24),
-                    Text(
-                      l10n.yourLibrary,
-                      style: Theme.of(context).textTheme.titleLarge,
-                    ),
-                    const SizedBox(height: 12),
-                    if (decks
-                        .where(
-                          (d) => d.title.toLowerCase().contains(
-                            search.toLowerCase(),
-                          ),
-                        )
-                        .isEmpty)
-                      Padding(
-                        padding: EdgeInsets.all(32),
-                        child: Text(l10n.noDecksFound),
+                      const SizedBox(height: 8),
+                      Text(
+                        l10n.libraryDescription,
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.onSurfaceVariant,
+                        ),
                       ),
-                    ...decks
-                        .where(
-                          (d) => d.title.toLowerCase().contains(
-                            search.toLowerCase(),
-                          ),
-                        )
-                        .map(
-                          (deck) => Card(
-                            child: Padding(
-                              padding: const EdgeInsets.all(20),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Row(
-                                    children: [
-                                      Icon(
-                                        Icons.style,
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .primary,
-                                      ),
-                                      const SizedBox(width: 12),
-                                      Expanded(
-                                        child: Text(
-                                          deck.title,
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .titleLarge,
+                      const SizedBox(height: 24),
+                      TextField(
+                        onChanged: (value) => setState(() => search = value),
+                        decoration: InputDecoration(
+                          prefixIcon: Icon(Icons.search),
+                          hintText: l10n.searchDecks,
+                        ),
+                      ),
+                      const SizedBox(height: 24),
+                      Text(
+                        l10n.deckCount(decks.length),
+                        style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                          color: Theme.of(context).colorScheme.onSurfaceVariant,
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      if (decks
+                          .where(
+                            (d) => d.title.toLowerCase().contains(
+                              search.toLowerCase(),
+                            ),
+                          )
+                          .isEmpty)
+                        Padding(
+                          padding: EdgeInsets.all(32),
+                          child: Text(l10n.noDecksFound),
+                        ),
+                      ...decks
+                          .where(
+                            (d) => d.title.toLowerCase().contains(
+                              search.toLowerCase(),
+                            ),
+                          )
+                          .map(
+                            (deck) => Card(
+                              child: Padding(
+                                padding: const EdgeInsets.all(20),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Icon(
+                                          Icons.style,
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .primary,
                                         ),
-                                      ),
-                                      IconButton(
-                                        tooltip: l10n.editDeck,
-                                        onPressed: () => edit(deck),
-                                        icon: const Icon(Icons.edit_outlined),
-                                      ),
-                                      IconButton(
-                                        tooltip: l10n.exportDeck,
-                                        onPressed: () async {
-                                          await Clipboard.setData(
-                                            ClipboardData(
-                                              text:
-                                                  const JsonEncoder.withIndent(
-                                                    '  ',
-                                                  ).convert(deck.toJson()),
-                                            ),
-                                          );
-                                          if (!context.mounted) {
-                                            return;
-                                          }
-                                          ScaffoldMessenger.of(
-                                            context,
-                                          ).showSnackBar(
-                                            SnackBar(
-                                              content: Text(l10n.deckCopied),
-                                            ),
-                                          );
-                                        },
-                                        icon: const Icon(Icons.ios_share),
-                                      ),
-                                    ],
-                                  ),
-                                  Text(
-                                    l10n.cardsStudied(
-                                      deck.cards.length,
-                                      deck.seconds ~/ 60,
+                                        const SizedBox(width: 12),
+                                        Expanded(
+                                          child: Text(
+                                            deck.title,
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .titleLarge,
+                                          ),
+                                        ),
+                                        IconButton(
+                                          tooltip: l10n.editDeck,
+                                          onPressed: () => edit(deck),
+                                          icon: const Icon(Icons.edit_outlined),
+                                        ),
+                                        IconButton(
+                                          tooltip: l10n.exportDeck,
+                                          onPressed: () async {
+                                            await Clipboard.setData(
+                                              ClipboardData(
+                                                text:
+                                                    const JsonEncoder.withIndent(
+                                                      '  ',
+                                                    ).convert(deck.toJson()),
+                                              ),
+                                            );
+                                            if (!context.mounted) {
+                                              return;
+                                            }
+                                            ScaffoldMessenger.of(
+                                              context,
+                                            ).showSnackBar(
+                                              SnackBar(
+                                                content: Text(l10n.deckCopied),
+                                              ),
+                                            );
+                                          },
+                                          icon: const Icon(Icons.ios_share),
+                                        ),
+                                      ],
                                     ),
-                                  ),
-                                  const SizedBox(height: 16),
-                                  Wrap(
-                                    spacing: 10,
-                                    runSpacing: 10,
-                                    children: [
-                                      FilledButton.icon(
-                                        onPressed: () => study(deck, false),
-                                        icon: const Icon(
-                                          Icons.auto_stories_outlined,
+                                    Text(
+                                      l10n.cardsStudied(
+                                        deck.cards.length,
+                                        deck.seconds ~/ 60,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 16),
+                                    Wrap(
+                                      spacing: 10,
+                                      runSpacing: 10,
+                                      children: [
+                                        FilledButton.icon(
+                                          onPressed: () => study(deck, false),
+                                          icon: const Icon(
+                                            Icons.auto_stories_outlined,
+                                          ),
+                                          label: Text(l10n.flashcards),
                                         ),
-                                        label: Text(l10n.flashcards),
-                                      ),
-                                      OutlinedButton.icon(
-                                        onPressed: () => study(deck, true),
-                                        icon: const Icon(Icons.quiz_outlined),
-                                        label: Text(l10n.takeQuiz),
-                                      ),
-                                    ],
-                                  ),
-                                ],
+                                        OutlinedButton.icon(
+                                          onPressed: () => study(deck, true),
+                                          icon: const Icon(Icons.quiz_outlined),
+                                          label: Text(l10n.takeQuiz),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
-            ),
+      ),
     );
   }
 }
@@ -998,6 +1001,7 @@ class _EditorPageState extends State<EditorPage> {
                             title.text.trim(),
                             deckCards,
                             seconds: widget.deck?.seconds ?? 0,
+                            completedCards: widget.deck?.completedCards ?? 0,
                           ),
                         );
                       } else {
@@ -1113,6 +1117,7 @@ class _StudyPageState extends State<StudyPage> with WidgetsBindingObserver {
 
   void next(bool known) {
     setState(() {
+      if (!widget.quiz) widget.deck.completedCards++;
       if (!known) {
         missed.add(round[index]);
       }

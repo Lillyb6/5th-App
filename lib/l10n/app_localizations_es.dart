@@ -406,4 +406,76 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get breakComplete => 'Descanso terminado. ¿Listo para continuar?';
+
+  @override
+  String get home => 'Inicio';
+
+  @override
+  String get library => 'Biblioteca';
+
+  @override
+  String get yourLearningCorner => 'TU RINCÓN PARA APRENDER';
+
+  @override
+  String get homeDescription =>
+      'Un rincón acogedor para mentes curiosas. Unas tarjetas y un poco de concentración para brillar.';
+
+  @override
+  String get decksCreated => 'Mazos creados';
+
+  @override
+  String get statMinutesStudied => 'Minutos de estudio';
+
+  @override
+  String get flashcardsCompleted => 'Tarjetas completadas';
+
+  @override
+  String get makeALittleProgress => 'Avanza un poquito hoy';
+
+  @override
+  String get beginStudyingHome => '¡A estudiar!';
+
+  @override
+  String get chooseYourRhythm => 'Elige un mazo. Encuentra tu ritmo.';
+
+  @override
+  String get createNewDeck => 'Crear nuevo mazo';
+
+  @override
+  String get libraryShortcut => 'Todo tu conocimiento en un lugar.';
+
+  @override
+  String get createShortcut => 'Dale un hogar a tu próxima gran idea.';
+
+  @override
+  String get smallSteps => 'Pequeños pasos. Grandes descubrimientos.';
+
+  @override
+  String get libraryDescription => 'Tu colección de pequeños descubrimientos.';
+
+  @override
+  String get studySession => 'Sesión de estudio';
+
+  @override
+  String get findYourFlow => 'Encuentra tu ritmo.';
+
+  @override
+  String get timerIntro =>
+      'Un poco de concentración ayuda mucho. Elige tu ritmo.';
+
+  @override
+  String get chooseTimer => 'Elige tu temporizador';
+
+  @override
+  String get flowtimeShort => 'Flowtime';
+
+  @override
+  String get pomodoroDescription =>
+      'Una sesión a la vez. Ajusta la cuenta atrás y ponte cómodo.';
+
+  @override
+  String get focusSession => 'SESIÓN DE CONCENTRACIÓN';
+
+  @override
+  String get beginStudying => 'Comenzar a estudiar';
 }

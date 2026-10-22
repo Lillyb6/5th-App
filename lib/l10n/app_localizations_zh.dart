@@ -375,4 +375,73 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get breakComplete => '休息结束。准备好继续专注了吗？';
+
+  @override
+  String get home => '首页';
+
+  @override
+  String get library => '学习库';
+
+  @override
+  String get yourLearningCorner => '你的学习小天地';
+
+  @override
+  String get homeDescription => '好奇心的温馨角落。几张卡片，一点专注，遇见更闪亮的自己。';
+
+  @override
+  String get decksCreated => '已创建卡组';
+
+  @override
+  String get statMinutesStudied => '已学习分钟';
+
+  @override
+  String get flashcardsCompleted => '已完成卡片';
+
+  @override
+  String get makeALittleProgress => '今天也进步一点点';
+
+  @override
+  String get beginStudyingHome => '开始学习！';
+
+  @override
+  String get chooseYourRhythm => '选择卡组，找到自己的节奏。';
+
+  @override
+  String get createNewDeck => '创建新卡组';
+
+  @override
+  String get libraryShortcut => '所有知识，汇聚一处。';
+
+  @override
+  String get createShortcut => '为下一个灵感安个家。';
+
+  @override
+  String get smallSteps => '小小进步，大大顿悟。';
+
+  @override
+  String get libraryDescription => '不断丰富的小小发现集。';
+
+  @override
+  String get studySession => '学习时段';
+
+  @override
+  String get findYourFlow => '找到你的节奏。';
+
+  @override
+  String get timerIntro => '一点专注，收获更多。选择你的步调。';
+
+  @override
+  String get chooseTimer => '选择计时器';
+
+  @override
+  String get flowtimeShort => 'Flowtime';
+
+  @override
+  String get pomodoroDescription => '一次专注一段时间。设置倒计时，安心学习。';
+
+  @override
+  String get focusSession => '专注时段';
+
+  @override
+  String get beginStudying => '开始学习';
 }

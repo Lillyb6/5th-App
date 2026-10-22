@@ -195,14 +195,14 @@ class _EntryPageState extends State<EntryPage> {
                       ),
                     ),
                     child: Icon(
-                      Icons.sentiment_satisfied_alt,
-                      size: 108,
+                      Icons.auto_awesome_rounded,
+                      size: 64,
                       color: Theme.of(context).colorScheme.primary,
                     ),
                   ),
                   const SizedBox(height: 24),
                   Text(
-                    'StudySpace',
+                    'Study Space',
                     style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                       color: Theme.of(context).colorScheme.primary,
                       fontWeight: FontWeight.bold,
@@ -356,44 +356,323 @@ class _EntryPageState extends State<EntryPage> {
   }
 }
 
-class HomeActions extends StatelessWidget {
-  const HomeActions({super.key, required this.onCreate, required this.onTimer});
-  final VoidCallback? onCreate;
-  final VoidCallback? onTimer;
+class StudyHome extends StatelessWidget {
+  const StudyHome({
+    super.key,
+    required this.username,
+    required this.decks,
+    required this.onLibrary,
+    required this.onStudy,
+    required this.onCreate,
+  });
+  final String username;
+  final List<Deck> decks;
+  final VoidCallback onLibrary;
+  final VoidCallback onStudy;
+  final VoidCallback onCreate;
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    return Column(
-      children: [
-        const SizedBox(height: 12),
-        Text(l10n.create, style: Theme.of(context).textTheme.titleLarge),
-        const SizedBox(height: 12),
-        SizedBox(
-          width: 88,
-          height: 88,
-          child: IconButton.filled(
-            tooltip: l10n.createDeck,
-            onPressed: onCreate,
-            iconSize: 48,
-            style: IconButton.styleFrom(
-              backgroundColor: ink,
-              foregroundColor: Colors.white,
+    final theme = Theme.of(context);
+    final colors = theme.colorScheme;
+    return Center(
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 880),
+        child: ListView(
+          padding: const EdgeInsets.fromLTRB(24, 12, 24, 28),
+          children: [
+            Text(
+              l10n.hiUser(username),
+              style: theme.textTheme.titleMedium?.copyWith(
+                color: colors.onSurfaceVariant,
+              ),
             ),
-            icon: const Icon(Icons.add),
+            const SizedBox(height: 16),
+            Row(
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: colors.primaryContainer,
+                    borderRadius: BorderRadius.circular(14),
+                  ),
+                  child: Icon(
+                    Icons.nights_stay_outlined,
+                    color: colors.primary,
+                    size: 24,
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Text(
+                    l10n.yourLearningCorner,
+                    style: theme.textTheme.labelMedium?.copyWith(
+                      color: colors.primary,
+                      letterSpacing: 1.4,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 20),
+            Text('Study Space', style: theme.textTheme.displaySmall),
+            const SizedBox(height: 10),
+            Text(
+              l10n.homeDescription,
+              style: theme.textTheme.bodyLarge?.copyWith(
+                color: colors.onSurfaceVariant,
+              ),
+            ),
+            const SizedBox(height: 24),
+            Container(
+              decoration: BoxDecoration(
+                color: colors.surface,
+                border: Border.all(color: colors.outlineVariant),
+                borderRadius: BorderRadius.circular(24),
+              ),
+              padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _HomeStat(
+                    value: decks.length,
+                    label: l10n.decksCreated,
+                    icon: Icons.layers_outlined,
+                  ),
+                  _HomeStat(
+                    value:
+                        decks.fold<int>(0, (sum, deck) => sum + deck.seconds) ~/
+                        60,
+                    label: l10n.statMinutesStudied,
+                    icon: Icons.schedule_rounded,
+                  ),
+                  _HomeStat(
+                    value: decks.fold<int>(
+                      0,
+                      (sum, deck) => sum + deck.completedCards,
+                    ),
+                    label: l10n.flashcardsCompleted,
+                    icon: Icons.done_all_rounded,
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 24),
+            Text(l10n.makeALittleProgress, style: theme.textTheme.titleLarge),
+            const SizedBox(height: 16),
+            Material(
+              color: Colors.transparent,
+              borderRadius: BorderRadius.circular(24),
+              clipBehavior: Clip.antiAlias,
+              child: Ink(
+                decoration: const BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [Color(0xff5056c9), Color(0xff37318a)],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
+                ),
+                child: InkWell(
+                  onTap: onStudy,
+                  child: Padding(
+                    padding: const EdgeInsets.all(20),
+                    child: Row(
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.all(12),
+                          decoration: BoxDecoration(
+                            color: Colors.white.withValues(alpha: 0.12),
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          child: const Icon(
+                            Icons.play_arrow_rounded,
+                            color: Colors.white,
+                            size: 28,
+                          ),
+                        ),
+                        const SizedBox(width: 16),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                l10n.beginStudyingHome,
+                                style: theme.textTheme.titleLarge?.copyWith(
+                                  color: Colors.white,
+                                ),
+                              ),
+                              const SizedBox(height: 6),
+                              Text(
+                                l10n.chooseYourRhythm,
+                                style: theme.textTheme.bodyMedium?.copyWith(
+                                  color: const Color(0xffe0e7ff),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        const Icon(
+                          Icons.arrow_forward_rounded,
+                          color: Colors.white,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(height: 16),
+            LayoutBuilder(
+              builder: (context, constraints) {
+                final tiles = [
+                  _HomeAction(
+                    title: l10n.library,
+                    subtitle: l10n.libraryShortcut,
+                    icon: Icons.auto_stories_outlined,
+                    onTap: onLibrary,
+                  ),
+                  _HomeAction(
+                    title: l10n.createNewDeck,
+                    subtitle: l10n.createShortcut,
+                    icon: Icons.add_rounded,
+                    onTap: onCreate,
+                  ),
+                ];
+                if (constraints.maxWidth < 500) {
+                  return Column(
+                    children: [tiles[0], const SizedBox(height: 12), tiles[1]],
+                  );
+                }
+                return IntrinsicHeight(
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Expanded(child: tiles[0]),
+                      const SizedBox(width: 16),
+                      Expanded(child: tiles[1]),
+                    ],
+                  ),
+                );
+              },
+            ),
+            const SizedBox(height: 28),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.favorite_border_rounded,
+                  size: 14,
+                  color: colors.primary,
+                ),
+                const SizedBox(width: 8),
+                Flexible(
+                  child: Text(
+                    l10n.smallSteps,
+                    textAlign: TextAlign.center,
+                    style: theme.textTheme.bodySmall?.copyWith(
+                      color: colors.onSurfaceVariant,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _HomeStat extends StatelessWidget {
+  const _HomeStat({
+    required this.value,
+    required this.label,
+    required this.icon,
+  });
+  final int value;
+  final String label;
+  final IconData icon;
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Expanded(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 6),
+        child: Column(
+          children: [
+            Icon(icon, size: 21, color: theme.colorScheme.primary),
+            const SizedBox(height: 10),
+            Text('$value', style: theme.textTheme.headlineMedium),
+            const SizedBox(height: 4),
+            Text(
+              label,
+              textAlign: TextAlign.center,
+              style: theme.textTheme.bodySmall?.copyWith(
+                color: theme.colorScheme.onSurfaceVariant,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _HomeAction extends StatelessWidget {
+  const _HomeAction({
+    required this.title,
+    required this.subtitle,
+    required this.icon,
+    required this.onTap,
+  });
+  final String title;
+  final String subtitle;
+  final IconData icon;
+  final VoidCallback onTap;
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Material(
+      color: theme.colorScheme.surface,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),
+        side: BorderSide(color: theme.colorScheme.outlineVariant),
+      ),
+      clipBehavior: Clip.antiAlias,
+      child: InkWell(
+        onTap: onTap,
+        child: Padding(
+          padding: const EdgeInsets.all(20),
+          child: Row(
+            children: [
+              Icon(icon, color: theme.colorScheme.primary, size: 26),
+              const SizedBox(width: 16),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(title, style: theme.textTheme.titleMedium),
+                    const SizedBox(height: 4),
+                    Text(
+                      subtitle,
+                      style: theme.textTheme.bodySmall?.copyWith(
+                        color: theme.colorScheme.onSurfaceVariant,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(width: 8),
+              Icon(
+                Icons.chevron_right_rounded,
+                color: theme.colorScheme.onSurfaceVariant,
+              ),
+            ],
           ),
         ),
-        const SizedBox(height: 32),
-        SizedBox(
-          width: double.infinity,
-          height: 64,
-          child: OutlinedButton.icon(
-            onPressed: onTimer,
-            icon: const Icon(Icons.timer_outlined),
-            label: Text(l10n.timer, style: const TextStyle(fontSize: 22)),
-          ),
-        ),
-        const SizedBox(height: 32),
-      ],
+      ),
     );
   }
 }
@@ -413,6 +692,7 @@ class TimerChoicePage extends StatefulWidget {
 class _TimerChoicePageState extends State<TimerChoicePage> {
   Deck? selected;
   int minutes = 25;
+  StudyTimerMode mode = StudyTimerMode.pomodoro;
   @override
   void initState() {
     super.initState();
@@ -422,33 +702,128 @@ class _TimerChoicePageState extends State<TimerChoicePage> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final theme = Theme.of(context);
+    final colors = theme.colorScheme;
+    final description = switch (mode) {
+      StudyTimerMode.pomodoro => l10n.pomodoroDescription,
+      StudyTimerMode.openEnded => l10n.openEndedDescription,
+      StudyTimerMode.flowtime => l10n.flowtimeDescription,
+    };
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.timer)),
+      appBar: AppBar(title: Text(l10n.studySession)),
       body: Center(
         child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 480),
+          constraints: const BoxConstraints(maxWidth: 680),
           child: ListView(
-            padding: const EdgeInsets.all(32),
+            padding: const EdgeInsets.fromLTRB(24, 24, 24, 32),
             children: [
-              Icon(
-                Icons.timer_outlined,
-                size: 64,
-                color: Theme.of(context).colorScheme.primary,
+              Text(l10n.findYourFlow, style: theme.textTheme.headlineLarge),
+              const SizedBox(height: 8),
+              Text(
+                l10n.timerIntro,
+                style: theme.textTheme.bodyLarge?.copyWith(
+                  color: colors.onSurfaceVariant,
+                ),
+              ),
+              const SizedBox(height: 28),
+              Text(l10n.chooseTimer, style: theme.textTheme.titleMedium),
+              const SizedBox(height: 12),
+              IntrinsicHeight(
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    for (final option in StudyTimerMode.values) ...[
+                      if (option != StudyTimerMode.values.first)
+                        const SizedBox(width: 8),
+                      Expanded(
+                        child: _TimerOption(
+                          selected: mode == option,
+                          label: switch (option) {
+                            StudyTimerMode.pomodoro => l10n.pomodoro,
+                            StudyTimerMode.openEnded => l10n.openEnded,
+                            StudyTimerMode.flowtime => l10n.flowtimeShort,
+                          },
+                          icon: switch (option) {
+                            StudyTimerMode.pomodoro => Icons.timelapse_rounded,
+                            StudyTimerMode.openEnded =>
+                              Icons.all_inclusive_rounded,
+                            StudyTimerMode.flowtime => Icons.waves_rounded,
+                          },
+                          onTap: () => setState(() => mode = option),
+                        ),
+                      ),
+                    ],
+                  ],
+                ),
+              ),
+              const SizedBox(height: 20),
+              Container(
+                padding: const EdgeInsets.all(24),
+                decoration: BoxDecoration(
+                  color: colors.surface,
+                  borderRadius: BorderRadius.circular(24),
+                  border: Border.all(color: colors.outlineVariant),
+                ),
+                child: Column(
+                  children: [
+                    Text(
+                      mode == StudyTimerMode.pomodoro
+                          ? l10n.focusSession
+                          : mode == StudyTimerMode.flowtime
+                          ? l10n.flowtime
+                          : l10n.openEnded,
+                      style: theme.textTheme.labelLarge?.copyWith(
+                        color: colors.primary,
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    Text(
+                      mode == StudyTimerMode.pomodoro ? '$minutes:00' : '0:00',
+                      style: theme.textTheme.displaySmall?.copyWith(
+                        fontSize: 56,
+                        letterSpacing: -2,
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    Text(
+                      description,
+                      textAlign: TextAlign.center,
+                      style: theme.textTheme.bodyMedium?.copyWith(
+                        color: colors.onSurfaceVariant,
+                      ),
+                    ),
+                    if (mode == StudyTimerMode.pomodoro) ...[
+                      const SizedBox(height: 22),
+                      DropdownButtonFormField<int>(
+                        initialValue: minutes,
+                        decoration: InputDecoration(
+                          labelText: l10n.timerDuration,
+                        ),
+                        items: [5, 10, 15, 25, 30, 50, 60]
+                            .map(
+                              (value) => DropdownMenuItem(
+                                value: value,
+                                child: Text(l10n.minutes(value)),
+                              ),
+                            )
+                            .toList(),
+                        onChanged: (value) => setState(() => minutes = value!),
+                      ),
+                    ],
+                  ],
+                ),
               ),
               const SizedBox(height: 24),
-              Text(
-                l10n.makeTimeToStudy,
-                textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.headlineSmall,
-              ),
-              const SizedBox(height: 32),
               if (selected == null)
                 Text(l10n.createDeckFirst)
-              else ...[
+              else
                 DropdownButtonFormField<Deck>(
                   initialValue: selected,
                   isExpanded: true,
-                  decoration: InputDecoration(labelText: l10n.studyDeck),
+                  decoration: InputDecoration(
+                    labelText: l10n.studyDeck,
+                    prefixIcon: const Icon(Icons.layers_outlined),
+                  ),
                   items: widget.decks
                       .map(
                         (deck) => DropdownMenuItem(
@@ -462,77 +837,85 @@ class _TimerChoicePageState extends State<TimerChoicePage> {
                       .toList(),
                   onChanged: (deck) => setState(() => selected = deck),
                 ),
-                const SizedBox(height: 32),
-                SizedBox(
-                  height: 88,
-                  child: FilledButton(
-                    onPressed: () => widget.onStudy(
-                      selected!,
-                      minutes,
-                      StudyTimerMode.pomodoro,
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          l10n.pomodoro,
-                          style: const TextStyle(fontSize: 24),
-                        ),
-                        Text(l10n.minutes(minutes)),
-                      ],
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 24),
-                DropdownButtonFormField<int>(
-                  initialValue: minutes,
-                  decoration: InputDecoration(labelText: l10n.timerDuration),
-                  items: [5, 10, 15, 25, 30, 50, 60]
-                      .map(
-                        (value) => DropdownMenuItem(
-                          value: value,
-                          child: Text(l10n.minutes(value)),
-                        ),
-                      )
-                      .toList(),
-                  onChanged: (value) => setState(() => minutes = value!),
-                ),
-                const SizedBox(height: 24),
-                OutlinedButton(
-                  onPressed: () =>
-                      widget.onStudy(selected!, 0, StudyTimerMode.openEnded),
-                  child: Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Column(
-                      children: [
-                        Text(
-                          l10n.openEnded,
-                          style: const TextStyle(fontSize: 24),
-                        ),
-                        Text(l10n.openEndedDescription),
-                      ],
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 16),
-                OutlinedButton(
-                  onPressed: () =>
-                      widget.onStudy(selected!, 0, StudyTimerMode.flowtime),
-                  child: Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Column(
-                      children: [
-                        Text(
-                          l10n.flowtime,
-                          style: const TextStyle(fontSize: 24),
-                        ),
-                        Text(l10n.flowtimeDescription),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
+              const SizedBox(height: 24),
+              FilledButton.icon(
+                onPressed: selected == null
+                    ? null
+                    : () => widget.onStudy(
+                        selected!,
+                        mode == StudyTimerMode.pomodoro ? minutes : 0,
+                        mode,
+                      ),
+                icon: const Icon(Icons.play_arrow_rounded),
+                label: Text(l10n.beginStudying),
+              ),
             ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _TimerOption extends StatelessWidget {
+  const _TimerOption({
+    required this.selected,
+    required this.label,
+    required this.icon,
+    required this.onTap,
+  });
+  final bool selected;
+  final String label;
+  final IconData icon;
+  final VoidCallback onTap;
+  @override
+  Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
+    final foreground = selected ? Colors.white : colors.onSurfaceVariant;
+    return Semantics(
+      selected: selected,
+      button: true,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 180),
+        decoration: BoxDecoration(
+          color: selected ? const Color(0xff5357cf) : colors.surface,
+          borderRadius: BorderRadius.circular(18),
+          border: Border.all(
+            color: selected ? const Color(0xff9295ff) : colors.outlineVariant,
+          ),
+        ),
+        child: Material(
+          color: Colors.transparent,
+          child: InkWell(
+            onTap: onTap,
+            borderRadius: BorderRadius.circular(18),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 18),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(icon, color: foreground, size: 28),
+                  const SizedBox(height: 12),
+                  Text(
+                    label,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w700,
+                      color: foreground,
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  Icon(
+                    selected
+                        ? Icons.check_circle_rounded
+                        : Icons.radio_button_unchecked_rounded,
+                    color: foreground,
+                    size: 18,
+                  ),
+                ],
+              ),
+            ),
           ),
         ),
       ),

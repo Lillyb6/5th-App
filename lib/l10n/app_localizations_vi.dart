@@ -388,4 +388,76 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get breakComplete => 'Hết giờ nghỉ. Sẵn sàng học tiếp?';
+
+  @override
+  String get home => 'Trang chủ';
+
+  @override
+  String get library => 'Thư viện';
+
+  @override
+  String get yourLearningCorner => 'GÓC HỌC TẬP NHỎ CỦA BẠN';
+
+  @override
+  String get homeDescription =>
+      'Một góc ấm áp cho trí tò mò. Vài thẻ học, chút tập trung, thêm nhiều khám phá.';
+
+  @override
+  String get decksCreated => 'Bộ thẻ đã tạo';
+
+  @override
+  String get statMinutesStudied => 'Phút đã học';
+
+  @override
+  String get flashcardsCompleted => 'Thẻ đã hoàn thành';
+
+  @override
+  String get makeALittleProgress => 'Tiến bộ một chút hôm nay';
+
+  @override
+  String get beginStudyingHome => 'Bắt đầu học!';
+
+  @override
+  String get chooseYourRhythm => 'Chọn bộ thẻ. Tìm nhịp học của bạn.';
+
+  @override
+  String get createNewDeck => 'Tạo bộ thẻ mới';
+
+  @override
+  String get libraryShortcut => 'Kiến thức của bạn ở cùng một nơi.';
+
+  @override
+  String get createShortcut => 'Nơi cho ý tưởng lớn tiếp theo.';
+
+  @override
+  String get smallSteps => 'Bước nhỏ. Khám phá lớn.';
+
+  @override
+  String get libraryDescription => 'Bộ sưu tập khám phá ngày càng phong phú.';
+
+  @override
+  String get studySession => 'Phiên học';
+
+  @override
+  String get findYourFlow => 'Tìm nhịp học của bạn.';
+
+  @override
+  String get timerIntro =>
+      'Một chút tập trung mang lại nhiều điều. Chọn nhịp học.';
+
+  @override
+  String get chooseTimer => 'Chọn bộ hẹn giờ';
+
+  @override
+  String get flowtimeShort => 'Flowtime';
+
+  @override
+  String get pomodoroDescription =>
+      'Từng phiên tập trung. Đặt thời gian đếm ngược và bắt đầu.';
+
+  @override
+  String get focusSession => 'PHIÊN TẬP TRUNG';
+
+  @override
+  String get beginStudying => 'Bắt đầu học';
 }
