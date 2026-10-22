@@ -313,7 +313,8 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
-  String get tapOrSwipe => 'Toca o desliza para voltear';
+  String get tapOrSwipe =>
+      'Toca para voltear · Izquierda: seguir aprendiendo · Derecha: lo sé';
 
   @override
   String get whichTerm => '¿Qué término corresponde a esta definición?';
@@ -379,4 +380,30 @@ class AppLocalizationsEs extends AppLocalizations {
   String studyTime(String duration) {
     return 'Tiempo de estudio $duration';
   }
+
+  @override
+  String get openEnded => 'Sin límite';
+
+  @override
+  String get openEndedDescription =>
+      'El tiempo avanza mientras estudias a tu ritmo.';
+
+  @override
+  String get flowtime => 'Flowtime / Flowmodoro';
+
+  @override
+  String get flowtimeDescription =>
+      'Estudia libremente; descansa una quinta parte del tiempo de estudio.';
+
+  @override
+  String get takeBreak => 'Tomar un descanso';
+
+  @override
+  String get resumeFocus => 'Iniciar la siguiente sesión';
+
+  @override
+  String get breakTimer => 'Descanso';
+
+  @override
+  String get breakComplete => 'Descanso terminado. ¿Listo para continuar?';
 }

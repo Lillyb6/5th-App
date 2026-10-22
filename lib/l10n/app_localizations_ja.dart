@@ -289,7 +289,7 @@ class AppLocalizationsJa extends AppLocalizations {
   }
 
   @override
-  String get tapOrSwipe => 'タップまたはスワイプしてカードをめくる';
+  String get tapOrSwipe => 'タップで裏返す · 左：学習中 · 右：覚えた';
 
   @override
   String get whichTerm => 'この定義に当てはまる用語はどれですか？';
@@ -353,4 +353,28 @@ class AppLocalizationsJa extends AppLocalizations {
   String studyTime(String duration) {
     return '学習時間 $duration';
   }
+
+  @override
+  String get openEnded => '時間制限なし';
+
+  @override
+  String get openEndedDescription => '自分のペースで学習し、経過時間を計測します。';
+
+  @override
+  String get flowtime => 'Flowtime / Flowmodoro';
+
+  @override
+  String get flowtimeDescription => '自由に集中した後、集中時間の5分の1だけ休憩します。';
+
+  @override
+  String get takeBreak => '休憩する';
+
+  @override
+  String get resumeFocus => '次の集中セッションを開始';
+
+  @override
+  String get breakTimer => '休憩';
+
+  @override
+  String get breakComplete => '休憩終了。学習を再開しましょう。';
 }

@@ -81,7 +81,7 @@
   "studyProgress": "Thẻ ghi nhớ • {current}/{total}",
   "correctCount": "Đúng {correct}/{total} câu",
   "rememberedCount": "Đã nhớ {correct}/{total} thẻ",
-  "tapOrSwipe": "Chạm hoặc vuốt để lật thẻ",
+  "tapOrSwipe": "Chạm để lật · Vuốt trái: cần học thêm · Vuốt phải: đã nhớ",
   "whichTerm": "Thuật ngữ nào phù hợp với định nghĩa này?",
   "correct": "Chính xác!",
   "incorrectAnswer": "Chưa đúng. Thuật ngữ đúng là {term}.",
@@ -100,5 +100,13 @@
   "pauseTimer": "Tạm dừng hẹn giờ",
   "startTimer": "Bắt đầu hẹn giờ",
   "resetTimer": "Đặt lại hẹn giờ",
-  "studyTime": "Thời gian học {duration}"
+  "studyTime": "Thời gian học {duration}",
+  "openEnded": "Không giới hạn",
+  "openEndedDescription": "Đếm tăng và học theo nhịp độ của bạn.",
+  "flowtime": "Flowtime / Flowmodoro",
+  "flowtimeDescription": "Học tự do, rồi nghỉ bằng một phần năm thời gian tập trung.",
+  "takeBreak": "Nghỉ giải lao",
+  "resumeFocus": "Bắt đầu phiên học tiếp theo",
+  "breakTimer": "Giải lao",
+  "breakComplete": "Hết giờ nghỉ. Sẵn sàng học tiếp?"
 }

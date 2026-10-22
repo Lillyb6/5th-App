@@ -81,7 +81,7 @@
   "studyProgress": "学习卡 • {current}/{total}",
   "correctCount": "答对 {correct}/{total} 题",
   "rememberedCount": "记住 {correct}/{total} 张卡",
-  "tapOrSwipe": "点击或滑动翻转卡片",
+  "tapOrSwipe": "点击翻面 · 左滑：仍需学习 · 右滑：已掌握",
   "whichTerm": "哪个术语与此定义相符？",
   "correct": "正确！",
   "incorrectAnswer": "不太对。正确术语是 {term}。",
@@ -100,5 +100,13 @@
   "pauseTimer": "暂停专注计时器",
   "startTimer": "开始专注计时器",
   "resetTimer": "重置计时器",
-  "studyTime": "学习时间 {duration}"
+  "studyTime": "学习时间 {duration}",
+  "openEnded": "开放式计时",
+  "openEndedDescription": "正向计时，按自己的节奏学习。",
+  "flowtime": "Flowtime / Flowmodoro",
+  "flowtimeDescription": "自由专注，然后休息专注时长的五分之一。",
+  "takeBreak": "开始休息",
+  "resumeFocus": "开始下一轮专注",
+  "breakTimer": "休息",
+  "breakComplete": "休息结束。准备好继续专注了吗？"
 }

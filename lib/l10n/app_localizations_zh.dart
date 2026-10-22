@@ -287,7 +287,7 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
-  String get tapOrSwipe => '点击或滑动翻转卡片';
+  String get tapOrSwipe => '点击翻面 · 左滑：仍需学习 · 右滑：已掌握';
 
   @override
   String get whichTerm => '哪个术语与此定义相符？';
@@ -351,4 +351,28 @@ class AppLocalizationsZh extends AppLocalizations {
   String studyTime(String duration) {
     return '学习时间 $duration';
   }
+
+  @override
+  String get openEnded => '开放式计时';
+
+  @override
+  String get openEndedDescription => '正向计时，按自己的节奏学习。';
+
+  @override
+  String get flowtime => 'Flowtime / Flowmodoro';
+
+  @override
+  String get flowtimeDescription => '自由专注，然后休息专注时长的五分之一。';
+
+  @override
+  String get takeBreak => '开始休息';
+
+  @override
+  String get resumeFocus => '开始下一轮专注';
+
+  @override
+  String get breakTimer => '休息';
+
+  @override
+  String get breakComplete => '休息结束。准备好继续专注了吗？';
 }

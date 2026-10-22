@@ -81,7 +81,7 @@
   "studyProgress": "フラッシュカード • {current}/{total}",
   "correctCount": "{total} 問中 {correct} 問正解",
   "rememberedCount": "{total} 枚中 {correct} 枚を記憶",
-  "tapOrSwipe": "タップまたはスワイプしてカードをめくる",
+  "tapOrSwipe": "タップで裏返す · 左：学習中 · 右：覚えた",
   "whichTerm": "この定義に当てはまる用語はどれですか？",
   "correct": "正解！",
   "incorrectAnswer": "違います。正しい用語は {term} です。",
@@ -100,5 +100,13 @@
   "pauseTimer": "集中タイマーを一時停止",
   "startTimer": "集中タイマーを開始",
   "resetTimer": "タイマーをリセット",
-  "studyTime": "学習時間 {duration}"
+  "studyTime": "学習時間 {duration}",
+  "openEnded": "時間制限なし",
+  "openEndedDescription": "自分のペースで学習し、経過時間を計測します。",
+  "flowtime": "Flowtime / Flowmodoro",
+  "flowtimeDescription": "自由に集中した後、集中時間の5分の1だけ休憩します。",
+  "takeBreak": "休憩する",
+  "resumeFocus": "次の集中セッションを開始",
+  "breakTimer": "休憩",
+  "breakComplete": "休憩終了。学習を再開しましょう。"
 }

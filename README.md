@@ -6,11 +6,11 @@ A Flutter flashcard study app based on the Trello brainstorm.
 
 - Create and edit decks and cards; search the library.
 - Save decks and accumulated study time on the current device.
-- Tap or swipe to flip flashcards, then mark them remembered or still learning.
+- Tap to flip flashcards; swipe right for Got it or left for Still learning, or use the buttons.
 - Take multiple-choice quizzes that show a definition and ask you to pick the matching term from two or more options.
 - Decks require at least two cards before they can be saved.
 - Retry only the missed cards after either study mode.
-- 25-minute Pomodoro, 50-minute focus, and 5-minute break timers.
+- Choose Pomodoro with an adjustable countdown, an open-ended count-up timer, or Flowtime / Flowmodoro with breaks lasting one-fifth of the focus time.
 - Export a deck as JSON to the clipboard and import pasted JSON.
 - Enter as a guest, use the local demo account, or configure Supabase for hosted email accounts and per-account deck sync.
 - Choose English, Spanish, Vietnamese, Chinese, Japanese, Dutch, or German for the app interface.

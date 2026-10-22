@@ -405,14 +405,14 @@ class TimerChoicePage extends StatefulWidget {
     required this.onStudy,
   });
   final List<Deck> decks;
-  final Future<void> Function(Deck, int) onStudy;
+  final Future<void> Function(Deck, int, StudyTimerMode) onStudy;
   @override
   State<TimerChoicePage> createState() => _TimerChoicePageState();
 }
 
 class _TimerChoicePageState extends State<TimerChoicePage> {
   Deck? selected;
-  int minutes = 15;
+  int minutes = 25;
   @override
   void initState() {
     super.initState();
@@ -466,7 +466,11 @@ class _TimerChoicePageState extends State<TimerChoicePage> {
                 SizedBox(
                   height: 88,
                   child: FilledButton(
-                    onPressed: () => widget.onStudy(selected!, 25),
+                    onPressed: () => widget.onStudy(
+                      selected!,
+                      minutes,
+                      StudyTimerMode.pomodoro,
+                    ),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -474,7 +478,7 @@ class _TimerChoicePageState extends State<TimerChoicePage> {
                           l10n.pomodoro,
                           style: const TextStyle(fontSize: 24),
                         ),
-                        Text(l10n.focusMinutes),
+                        Text(l10n.minutes(minutes)),
                       ],
                     ),
                   ),
@@ -483,7 +487,7 @@ class _TimerChoicePageState extends State<TimerChoicePage> {
                 DropdownButtonFormField<int>(
                   initialValue: minutes,
                   decoration: InputDecoration(labelText: l10n.timerDuration),
-                  items: [5, 10, 15, 30, 50, 60]
+                  items: [5, 10, 15, 25, 30, 50, 60]
                       .map(
                         (value) => DropdownMenuItem(
                           value: value,
@@ -493,19 +497,40 @@ class _TimerChoicePageState extends State<TimerChoicePage> {
                       .toList(),
                   onChanged: (value) => setState(() => minutes = value!),
                 ),
-                const SizedBox(height: 16),
-                SizedBox(
-                  height: 72,
-                  child: OutlinedButton(
-                    onPressed: () => widget.onStudy(selected!, minutes),
-                    child: Text(
-                      l10n.timer,
-                      style: const TextStyle(fontSize: 24),
+                const SizedBox(height: 24),
+                OutlinedButton(
+                  onPressed: () =>
+                      widget.onStudy(selected!, 0, StudyTimerMode.openEnded),
+                  child: Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Column(
+                      children: [
+                        Text(
+                          l10n.openEnded,
+                          style: const TextStyle(fontSize: 24),
+                        ),
+                        Text(l10n.openEndedDescription),
+                      ],
                     ),
                   ),
                 ),
                 const SizedBox(height: 16),
-                Text(l10n.studyWithCountdown, textAlign: TextAlign.center),
+                OutlinedButton(
+                  onPressed: () =>
+                      widget.onStudy(selected!, 0, StudyTimerMode.flowtime),
+                  child: Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Column(
+                      children: [
+                        Text(
+                          l10n.flowtime,
+                          style: const TextStyle(fontSize: 24),
+                        ),
+                        Text(l10n.flowtimeDescription),
+                      ],
+                    ),
+                  ),
+                ),
               ],
             ],
           ),
@@ -519,12 +544,16 @@ class StudyTimerBar extends StatelessWidget {
   const StudyTimerBar({
     super.key,
     required this.seconds,
+    this.countsUp = false,
+    this.label,
     required this.running,
     required this.enabled,
     required this.onToggle,
     required this.onReset,
   });
   final int seconds;
+  final bool countsUp;
+  final String? label;
   final bool running;
   final bool enabled;
   final VoidCallback onToggle;
@@ -534,7 +563,7 @@ class StudyTimerBar extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
     return Column(
       children: [
-        Text(l10n.timer),
+        Text(label ?? l10n.timer),
         const SizedBox(height: 8),
         Container(
           decoration: BoxDecoration(
@@ -547,7 +576,9 @@ class StudyTimerBar extends StatelessWidget {
             children: [
               IconButton(
                 tooltip: running ? l10n.pauseTimer : l10n.startTimer,
-                onPressed: enabled && seconds > 0 ? onToggle : null,
+                onPressed: enabled && (countsUp || seconds > 0)
+                    ? onToggle
+                    : null,
                 icon: Icon(running ? Icons.pause : Icons.play_arrow),
               ),
               Expanded(

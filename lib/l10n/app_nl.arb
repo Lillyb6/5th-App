@@ -81,7 +81,7 @@
   "studyProgress": "Flashcards • {current} van {total}",
   "correctCount": "{correct} van {total} goed",
   "rememberedCount": "{correct} van {total} onthouden",
-  "tapOrSwipe": "Tik of veeg om de kaart om te draaien",
+  "tapOrSwipe": "Tik om te draaien · Links: nog leren · Rechts: goed",
   "whichTerm": "Welke term past bij deze definitie?",
   "correct": "Goed!",
   "incorrectAnswer": "Niet helemaal. De juiste term is {term}.",
@@ -100,5 +100,13 @@
   "pauseTimer": "Focustimer pauzeren",
   "startTimer": "Focustimer starten",
   "resetTimer": "Timer opnieuw instellen",
-  "studyTime": "Studietijd {duration}"
+  "studyTime": "Studietijd {duration}",
+  "openEnded": "Zonder tijdslimiet",
+  "openEndedDescription": "Tel op en studeer in je eigen tempo.",
+  "flowtime": "Flowtime / Flowmodoro",
+  "flowtimeDescription": "Studeer vrij; pauzeer een vijfde van je studietijd.",
+  "takeBreak": "Neem een pauze",
+  "resumeFocus": "Start de volgende studiesessie",
+  "breakTimer": "Pauze",
+  "breakComplete": "Pauze voorbij. Klaar om verder te leren?"
 }

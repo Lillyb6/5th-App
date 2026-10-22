@@ -81,7 +81,7 @@
   "studyProgress": "Lernkarten • {current} von {total}",
   "correctCount": "{correct} von {total} richtig",
   "rememberedCount": "{correct} von {total} gemerkt",
-  "tapOrSwipe": "Tippen oder wischen, um die Karte umzudrehen",
+  "tapOrSwipe": "Tippen zum Umdrehen · Links: noch lernen · Rechts: gewusst",
   "whichTerm": "Welcher Begriff passt zu dieser Definition?",
   "correct": "Richtig!",
   "incorrectAnswer": "Nicht ganz. Der richtige Begriff ist {term}.",
@@ -100,5 +100,13 @@
   "pauseTimer": "Fokustimer pausieren",
   "startTimer": "Fokustimer starten",
   "resetTimer": "Timer zurücksetzen",
-  "studyTime": "Lernzeit {duration}"
+  "studyTime": "Lernzeit {duration}",
+  "openEnded": "Ohne Zeitlimit",
+  "openEndedDescription": "Zähle aufwärts und lerne in deinem Tempo.",
+  "flowtime": "Flowtime / Flowmodoro",
+  "flowtimeDescription": "Lerne frei; die Pause dauert ein Fünftel deiner Lernzeit.",
+  "takeBreak": "Pause machen",
+  "resumeFocus": "Nächste Lernphase starten",
+  "breakTimer": "Pause",
+  "breakComplete": "Pause beendet. Bereit zum Weiterlernen?"
 }

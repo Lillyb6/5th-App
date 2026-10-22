@@ -105,7 +105,7 @@ void main() {
     );
   });
 
-  testWidgets('Tap and swipe flip cards; retry includes only missed cards', (
+  testWidgets('Tap flips and swipes grade cards; retry includes only missed cards', (
     tester,
   ) async {
     await prepare(tester);
@@ -115,8 +115,6 @@ void main() {
     await tap(tester, find.text('Got it'));
     await tester.drag(find.text('Farewell'), const Offset(-200, 0));
     await tester.pumpAndSettle();
-    expect(find.text('Goodbye'), findsOneWidget);
-    await tap(tester, find.text('Still learning'));
     expect(find.text('1 of 2 remembered'), findsOneWidget);
     await tap(tester, find.text('Retry 1 missed cards'));
     expect(find.text('Farewell'), findsAtLeastNWidgets(1));

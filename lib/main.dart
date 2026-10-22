@@ -557,13 +557,19 @@ class _LibraryPageState extends State<LibraryPage> {
     await save();
   }
 
-  Future<void> study(Deck deck, bool quiz, {int? minutes}) async {
+  Future<void> study(
+    Deck deck,
+    bool quiz, {
+    int? minutes,
+    StudyTimerMode timerMode = StudyTimerMode.pomodoro,
+  }) async {
     await Navigator.of(context).push(
       MaterialPageRoute(
         builder: (_) => StudyPage(
           deck: deck,
           quiz: quiz,
           initialMinutes: minutes ?? 25,
+          timerMode: timerMode,
           autoStart: minutes != null,
         ),
       ),
@@ -690,8 +696,12 @@ class _LibraryPageState extends State<LibraryPage> {
                           MaterialPageRoute(
                             builder: (_) => TimerChoicePage(
                               decks: decks,
-                              onStudy: (deck, minutes) =>
-                                  study(deck, false, minutes: minutes),
+                              onStudy: (deck, minutes, mode) => study(
+                                deck,
+                                false,
+                                minutes: minutes,
+                                timerMode: mode,
+                              ),
                             ),
                           ),
                         );
@@ -1008,15 +1018,19 @@ class _EditorPageState extends State<EditorPage> {
   }
 }
 
+enum StudyTimerMode { pomodoro, openEnded, flowtime }
+
 class StudyPage extends StatefulWidget {
   const StudyPage({
     super.key,
     required this.deck,
     required this.quiz,
     this.initialMinutes = 25,
+    this.timerMode = StudyTimerMode.pomodoro,
     this.autoStart = false,
   });
   final int initialMinutes;
+  final StudyTimerMode timerMode;
   final bool autoStart;
   final Deck deck;
   final bool quiz;
@@ -1033,6 +1047,12 @@ class _StudyPageState extends State<StudyPage> with WidgetsBindingObserver {
   int index = 0;
   int focusSeconds = 25 * 60;
   bool focusRunning = false;
+  bool onBreak = false;
+  double dragDistance = 0;
+  bool get countsUp => widget.timerMode != StudyTimerMode.pomodoro && !onBreak;
+  int get initialSeconds => widget.timerMode == StudyTimerMode.pomodoro
+      ? widget.initialMinutes * 60
+      : 0;
   bool flipped = false;
   bool complete = false;
   bool? correct;
@@ -1041,7 +1061,7 @@ class _StudyPageState extends State<StudyPage> with WidgetsBindingObserver {
   void initState() {
     super.initState();
     round = List.of(widget.deck.cards);
-    focusSeconds = widget.initialMinutes * 60;
+    focusSeconds = initialSeconds;
     focusRunning = widget.autoStart;
     watch.start();
     WidgetsBinding.instance.addObserver(this);
@@ -1050,13 +1070,19 @@ class _StudyPageState extends State<StudyPage> with WidgetsBindingObserver {
         return;
       }
       setState(() {
-        if (focusRunning && focusSeconds > 0) {
+        if (focusRunning && countsUp) {
+          focusSeconds++;
+        } else if (focusRunning && focusSeconds > 0) {
           focusSeconds--;
           if (focusSeconds == 0) {
             focusRunning = false;
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                content: Text(AppLocalizations.of(context)!.focusComplete),
+                content: Text(
+                  onBreak
+                      ? AppLocalizations.of(context)!.breakComplete
+                      : AppLocalizations.of(context)!.focusComplete,
+                ),
               ),
             );
           }
@@ -1132,14 +1158,42 @@ class _StudyPageState extends State<StudyPage> with WidgetsBindingObserver {
             children: [
               StudyTimerBar(
                 seconds: focusSeconds,
+                countsUp: countsUp,
+                label: onBreak
+                    ? l10n.breakTimer
+                    : switch (widget.timerMode) {
+                        StudyTimerMode.pomodoro => l10n.pomodoro,
+                        StudyTimerMode.openEnded => l10n.openEnded,
+                        StudyTimerMode.flowtime => l10n.flowtime,
+                      },
                 running: focusRunning,
                 enabled: !complete,
                 onToggle: () => setState(() => focusRunning = !focusRunning),
                 onReset: () => setState(() {
-                  focusSeconds = widget.initialMinutes * 60;
+                  focusSeconds = initialSeconds;
+                  onBreak = false;
                   focusRunning = false;
                 }),
               ),
+              if (widget.timerMode == StudyTimerMode.flowtime && !complete)
+                TextButton.icon(
+                  onPressed: onBreak || focusSeconds > 0
+                      ? () => setState(() {
+                          if (onBreak) {
+                            onBreak = false;
+                            focusSeconds = 0;
+                          } else {
+                            onBreak = true;
+                            focusSeconds = (focusSeconds / 5).ceil();
+                          }
+                          focusRunning = true;
+                        })
+                      : null,
+                  icon: Icon(
+                    onBreak ? Icons.play_arrow : Icons.coffee_outlined,
+                  ),
+                  label: Text(onBreak ? l10n.resumeFocus : l10n.takeBreak),
+                ),
               const SizedBox(height: 8),
               Text(
                 l10n.studyTime(duration(watch.elapsed.inSeconds)),
@@ -1201,43 +1255,62 @@ class _StudyPageState extends State<StudyPage> with WidgetsBindingObserver {
                   onTap: widget.quiz
                       ? null
                       : () => setState(() => flipped = !flipped),
+                  onHorizontalDragStart: widget.quiz
+                      ? null
+                      : (_) => setState(() => dragDistance = 0),
+                  onHorizontalDragUpdate: widget.quiz
+                      ? null
+                      : (details) =>
+                            setState(() => dragDistance += details.delta.dx),
+                  onHorizontalDragCancel: widget.quiz
+                      ? null
+                      : () => setState(() => dragDistance = 0),
                   onHorizontalDragEnd: widget.quiz
                       ? null
-                      : (_) => setState(() => flipped = !flipped),
-                  child: Semantics(
-                    button: !widget.quiz,
-                    label: widget.quiz ? l10n.whichTerm : l10n.tapOrSwipe,
-                    child: Card(
-                      child: AnimatedSize(
-                        duration: const Duration(milliseconds: 200),
-                        child: Container(
-                          constraints: const BoxConstraints(minHeight: 240),
-                          padding: const EdgeInsets.all(32),
-                          alignment: Alignment.center,
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Text(
-                                flipped
-                                    ? l10n.definition.toUpperCase()
-                                    : l10n.term.toUpperCase(),
-                                style: Theme.of(context).textTheme.labelMedium,
-                              ),
-                              const SizedBox(height: 24),
-                              Text(
-                                flipped
-                                    ? round[index].answer
-                                    : round[index].term,
-                                textAlign: TextAlign.center,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .headlineSmall,
-                              ),
-                              if (!widget.quiz) ...[
+                      : (_) {
+                          final distance = dragDistance;
+                          setState(() => dragDistance = 0);
+                          if (distance.abs() >= 80) next(distance > 0);
+                        },
+                  child: Transform.translate(
+                    offset: Offset(dragDistance, 0),
+                    child: Semantics(
+                      button: !widget.quiz,
+                      label: widget.quiz ? l10n.whichTerm : l10n.tapOrSwipe,
+                      child: Card(
+                        child: AnimatedSize(
+                          duration: const Duration(milliseconds: 200),
+                          child: Container(
+                            constraints: const BoxConstraints(minHeight: 240),
+                            padding: const EdgeInsets.all(32),
+                            alignment: Alignment.center,
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                  flipped
+                                      ? l10n.definition.toUpperCase()
+                                      : l10n.term.toUpperCase(),
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .labelMedium,
+                                ),
                                 const SizedBox(height: 24),
-                                Text(l10n.tapOrSwipe),
+                                Text(
+                                  flipped
+                                      ? round[index].answer
+                                      : round[index].term,
+                                  textAlign: TextAlign.center,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .headlineSmall,
+                                ),
+                                if (!widget.quiz) ...[
+                                  const SizedBox(height: 24),
+                                  Text(l10n.tapOrSwipe),
+                                ],
                               ],
-                            ],
+                            ),
                           ),
                         ),
                       ),

@@ -307,7 +307,8 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get tapOrSwipe => 'Tap or swipe to flip';
+  String get tapOrSwipe =>
+      'Tap to flip · Swipe left: still learning · Swipe right: got it';
 
   @override
   String get whichTerm => 'Which term matches this definition?';
@@ -373,4 +374,29 @@ class AppLocalizationsEn extends AppLocalizations {
   String studyTime(String duration) {
     return 'Study time $duration';
   }
+
+  @override
+  String get openEnded => 'Open-ended';
+
+  @override
+  String get openEndedDescription => 'Count up and study at your own pace.';
+
+  @override
+  String get flowtime => 'Flowtime / Flowmodoro';
+
+  @override
+  String get flowtimeDescription =>
+      'Focus freely, then take a break for one-fifth of your focus time.';
+
+  @override
+  String get takeBreak => 'Take a break';
+
+  @override
+  String get resumeFocus => 'Start next focus session';
+
+  @override
+  String get breakTimer => 'Break';
+
+  @override
+  String get breakComplete => 'Break complete. Ready to focus again?';
 }

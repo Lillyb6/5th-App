@@ -171,7 +171,7 @@
       "total": {"type": "int"}
     }
   },
-  "tapOrSwipe": "Tap or swipe to flip",
+  "tapOrSwipe": "Tap to flip · Swipe left: still learning · Swipe right: got it",
   "whichTerm": "Which term matches this definition?",
   "correct": "Correct!",
   "incorrectAnswer": "Not quite. The correct term is {term}.",
@@ -205,5 +205,13 @@
     "placeholders": {
       "duration": {"type": "String"}
     }
-  }
+  },
+  "openEnded": "Open-ended",
+  "openEndedDescription": "Count up and study at your own pace.",
+  "flowtime": "Flowtime / Flowmodoro",
+  "flowtimeDescription": "Focus freely, then take a break for one-fifth of your focus time.",
+  "takeBreak": "Take a break",
+  "resumeFocus": "Start next focus session",
+  "breakTimer": "Break",
+  "breakComplete": "Break complete. Ready to focus again?"
 }

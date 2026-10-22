@@ -296,7 +296,8 @@ class AppLocalizationsVi extends AppLocalizations {
   }
 
   @override
-  String get tapOrSwipe => 'Chạm hoặc vuốt để lật thẻ';
+  String get tapOrSwipe =>
+      'Chạm để lật · Vuốt trái: cần học thêm · Vuốt phải: đã nhớ';
 
   @override
   String get whichTerm => 'Thuật ngữ nào phù hợp với định nghĩa này?';
@@ -362,4 +363,29 @@ class AppLocalizationsVi extends AppLocalizations {
   String studyTime(String duration) {
     return 'Thời gian học $duration';
   }
+
+  @override
+  String get openEnded => 'Không giới hạn';
+
+  @override
+  String get openEndedDescription => 'Đếm tăng và học theo nhịp độ của bạn.';
+
+  @override
+  String get flowtime => 'Flowtime / Flowmodoro';
+
+  @override
+  String get flowtimeDescription =>
+      'Học tự do, rồi nghỉ bằng một phần năm thời gian tập trung.';
+
+  @override
+  String get takeBreak => 'Nghỉ giải lao';
+
+  @override
+  String get resumeFocus => 'Bắt đầu phiên học tiếp theo';
+
+  @override
+  String get breakTimer => 'Giải lao';
+
+  @override
+  String get breakComplete => 'Hết giờ nghỉ. Sẵn sàng học tiếp?';
 }

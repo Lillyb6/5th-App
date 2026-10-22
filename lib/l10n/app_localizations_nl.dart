@@ -299,7 +299,8 @@ class AppLocalizationsNl extends AppLocalizations {
   }
 
   @override
-  String get tapOrSwipe => 'Tik of veeg om de kaart om te draaien';
+  String get tapOrSwipe =>
+      'Tik om te draaien · Links: nog leren · Rechts: goed';
 
   @override
   String get whichTerm => 'Welke term past bij deze definitie?';
@@ -364,4 +365,29 @@ class AppLocalizationsNl extends AppLocalizations {
   String studyTime(String duration) {
     return 'Studietijd $duration';
   }
+
+  @override
+  String get openEnded => 'Zonder tijdslimiet';
+
+  @override
+  String get openEndedDescription => 'Tel op en studeer in je eigen tempo.';
+
+  @override
+  String get flowtime => 'Flowtime / Flowmodoro';
+
+  @override
+  String get flowtimeDescription =>
+      'Studeer vrij; pauzeer een vijfde van je studietijd.';
+
+  @override
+  String get takeBreak => 'Neem een pauze';
+
+  @override
+  String get resumeFocus => 'Start de volgende studiesessie';
+
+  @override
+  String get breakTimer => 'Pauze';
+
+  @override
+  String get breakComplete => 'Pauze voorbij. Klaar om verder te leren?';
 }

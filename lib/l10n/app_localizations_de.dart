@@ -298,7 +298,8 @@ class AppLocalizationsDe extends AppLocalizations {
   }
 
   @override
-  String get tapOrSwipe => 'Tippen oder wischen, um die Karte umzudrehen';
+  String get tapOrSwipe =>
+      'Tippen zum Umdrehen · Links: noch lernen · Rechts: gewusst';
 
   @override
   String get whichTerm => 'Welcher Begriff passt zu dieser Definition?';
@@ -364,4 +365,30 @@ class AppLocalizationsDe extends AppLocalizations {
   String studyTime(String duration) {
     return 'Lernzeit $duration';
   }
+
+  @override
+  String get openEnded => 'Ohne Zeitlimit';
+
+  @override
+  String get openEndedDescription =>
+      'Zähle aufwärts und lerne in deinem Tempo.';
+
+  @override
+  String get flowtime => 'Flowtime / Flowmodoro';
+
+  @override
+  String get flowtimeDescription =>
+      'Lerne frei; die Pause dauert ein Fünftel deiner Lernzeit.';
+
+  @override
+  String get takeBreak => 'Pause machen';
+
+  @override
+  String get resumeFocus => 'Nächste Lernphase starten';
+
+  @override
+  String get breakTimer => 'Pause';
+
+  @override
+  String get breakComplete => 'Pause beendet. Bereit zum Weiterlernen?';
 }

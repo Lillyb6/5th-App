@@ -81,7 +81,7 @@
   "studyProgress": "Tarjetas • {current} de {total}",
   "correctCount": "{correct} de {total} correctas",
   "rememberedCount": "{correct} de {total} recordadas",
-  "tapOrSwipe": "Toca o desliza para voltear",
+  "tapOrSwipe": "Toca para voltear · Izquierda: seguir aprendiendo · Derecha: lo sé",
   "whichTerm": "¿Qué término corresponde a esta definición?",
   "correct": "¡Correcto!",
   "incorrectAnswer": "No exactamente. El término correcto es {term}.",
@@ -100,5 +100,13 @@
   "pauseTimer": "Pausar temporizador",
   "startTimer": "Iniciar temporizador",
   "resetTimer": "Reiniciar temporizador",
-  "studyTime": "Tiempo de estudio {duration}"
+  "studyTime": "Tiempo de estudio {duration}",
+  "openEnded": "Sin límite",
+  "openEndedDescription": "El tiempo avanza mientras estudias a tu ritmo.",
+  "flowtime": "Flowtime / Flowmodoro",
+  "flowtimeDescription": "Estudia libremente; descansa una quinta parte del tiempo de estudio.",
+  "takeBreak": "Tomar un descanso",
+  "resumeFocus": "Iniciar la siguiente sesión",
+  "breakTimer": "Descanso",
+  "breakComplete": "Descanso terminado. ¿Listo para continuar?"
 }

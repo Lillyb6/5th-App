@@ -597,7 +597,7 @@ abstract class AppLocalizations {
   /// No description provided for @tapOrSwipe.
   ///
   /// In en, this message translates to:
-  /// **'Tap or swipe to flip'**
+  /// **'Tap to flip · Swipe left: still learning · Swipe right: got it'**
   String get tapOrSwipe;
 
   /// No description provided for @whichTerm.
@@ -713,6 +713,54 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Study time {duration}'**
   String studyTime(String duration);
+
+  /// No description provided for @openEnded.
+  ///
+  /// In en, this message translates to:
+  /// **'Open-ended'**
+  String get openEnded;
+
+  /// No description provided for @openEndedDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Count up and study at your own pace.'**
+  String get openEndedDescription;
+
+  /// No description provided for @flowtime.
+  ///
+  /// In en, this message translates to:
+  /// **'Flowtime / Flowmodoro'**
+  String get flowtime;
+
+  /// No description provided for @flowtimeDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Focus freely, then take a break for one-fifth of your focus time.'**
+  String get flowtimeDescription;
+
+  /// No description provided for @takeBreak.
+  ///
+  /// In en, this message translates to:
+  /// **'Take a break'**
+  String get takeBreak;
+
+  /// No description provided for @resumeFocus.
+  ///
+  /// In en, this message translates to:
+  /// **'Start next focus session'**
+  String get resumeFocus;
+
+  /// No description provided for @breakTimer.
+  ///
+  /// In en, this message translates to:
+  /// **'Break'**
+  String get breakTimer;
+
+  /// No description provided for @breakComplete.
+  ///
+  /// In en, this message translates to:
+  /// **'Break complete. Ready to focus again?'**
+  String get breakComplete;
 }
 
 class _AppLocalizationsDelegate

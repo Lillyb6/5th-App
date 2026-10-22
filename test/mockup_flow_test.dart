@@ -20,6 +20,11 @@ void main() {
     await tester.tap(find.text('Timer'));
     await tester.pumpAndSettle();
     expect(find.text('Pomodoro'), findsOneWidget);
+    expect(find.text('Open-ended'), findsOneWidget);
+    await tester.scrollUntilVisible(find.text('Flowtime / Flowmodoro'), 150);
+    expect(find.text('Flowtime / Flowmodoro'), findsOneWidget);
+    await tester.ensureVisible(find.text('Pomodoro'));
+    await tester.pumpAndSettle();
     await tester.tap(find.text('Pomodoro'));
     await tester.pumpAndSettle();
     expect(find.text('25:00'), findsOneWidget);
