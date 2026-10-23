@@ -23,7 +23,7 @@ A Flutter flashcard study app based on the Trello brainstorm.
 
 ## Run
 
-Install Flutter compatible with the Dart SDK constraint in pubspec.yaml.
+Install Flutter compatible with the Dart SDK constraint in `pubspec.yaml` (Dart 3.13.1 or later, below 4.0.0). Run these commands from the project folder.
 
 ```sh
 flutter pub get
@@ -31,6 +31,29 @@ flutter run -d chrome
 ```
 
 On Windows, Flutter plugins require Developer Mode for symbolic links. Enable it in Windows Settings if Flutter requests it.
+
+### Run on Android
+
+Install Android Studio and the Android SDK, then start an emulator in Device Manager or connect an Android phone with USB debugging enabled.
+
+```sh
+flutter doctor
+flutter devices
+flutter pub get
+flutter run -d <device-id>
+```
+
+Replace `<device-id>` with the Android device ID listed by `flutter devices` (for example, `emulator-5554`). In Android Studio, open this project folder, select the Android device, and run `lib/main.dart`.
+
+To download the newest code before running, commit or stash any local changes first, then run:
+
+```sh
+git pull --ff-only origin main
+flutter pub get
+```
+
+### Check and build locally
+
 
 ```sh
 flutter analyze
