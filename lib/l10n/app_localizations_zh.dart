@@ -64,6 +64,12 @@ class AppLocalizationsZh extends AppLocalizations {
   String get emailInvalid => '请输入有效的电子邮箱地址';
 
   @override
+  String get resendConfirmationEmail => '重新发送确认邮件';
+
+  @override
+  String get confirmationEmailSent => '已请求发送确认邮件。请检查收件箱和垃圾邮件文件夹，然后登录。';
+
+  @override
   String get emailConfirmation => '请检查邮箱并确认账号，然后登录。';
 
   @override

@@ -65,6 +65,8 @@ flutter build web
 
 The app uses the Flutter Supabase client, not the JavaScript `@supabase/server` package. It initializes Supabase with this project's URL and publishable key by default. You can override them with `--dart-define`; sign-up and sign-in use Supabase Auth, and signed-in users' decks sync through `user_deck_data`.
 
+The default project is `dylpsslfmrrnskboisia` (hollylester's Project). Accounts from the previous project are separate; create a new demo account in this project. Restart or rebuild the app after changing the project connection. Explicit `--dart-define` values override these defaults.
+
 1. Apply both database migrations to your Supabase project in timestamp order. Run [20261020160000_user_deck_data.sql](./supabase/migrations/20261020160000_user_deck_data.sql), then [20261020170000_seed_user_decks.sql](./supabase/migrations/20261020170000_seed_user_decks.sql), in Supabase **SQL Editor**. The second migration seeds starter decks for existing accounts and automatically adds one for new accounts. Alternatively, with the Supabase CLI:
 
    ```sh

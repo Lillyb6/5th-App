@@ -67,6 +67,13 @@ class AppLocalizationsVi extends AppLocalizations {
   String get emailInvalid => 'Vui lòng nhập địa chỉ email hợp lệ';
 
   @override
+  String get resendConfirmationEmail => 'Gửi lại email xác nhận';
+
+  @override
+  String get confirmationEmailSent =>
+      'Đã yêu cầu email xác nhận. Kiểm tra hộp thư đến và thư rác, sau đó đăng nhập.';
+
+  @override
   String get emailConfirmation =>
       'Hãy kiểm tra email để xác nhận tài khoản, sau đó đăng nhập.';
 

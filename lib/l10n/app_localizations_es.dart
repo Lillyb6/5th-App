@@ -70,6 +70,13 @@ class AppLocalizationsEs extends AppLocalizations {
   String get emailInvalid => 'Introduce una dirección de correo válida';
 
   @override
+  String get resendConfirmationEmail => 'Reenviar correo de confirmación';
+
+  @override
+  String get confirmationEmailSent =>
+      'Se solicitó un correo de confirmación. Revisa tu bandeja de entrada y la carpeta de spam, y luego inicia sesión.';
+
+  @override
   String get emailConfirmation =>
       'Revisa tu correo para confirmar la cuenta y luego inicia sesión.';
 

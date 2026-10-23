@@ -18,6 +18,8 @@
   "usernameTaken": "That username is already taken.",
   "invalidCredentials": "Username or password is incorrect.",
   "emailInvalid": "Enter a valid email address",
+  "resendConfirmationEmail": "Resend confirmation email",
+  "confirmationEmailSent": "Confirmation email requested. Check your inbox and spam folder, then sign in.",
   "emailConfirmation": "Check your email to confirm your account, then sign in.",
   "authRequestError": "Could not complete the account request: {error}",
   "@authRequestError": {

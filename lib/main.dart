@@ -16,11 +16,11 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 const supabaseUrl = String.fromEnvironment(
   'SUPABASE_URL',
-  defaultValue: 'https://regxvjrxgxynwlnqmusu.supabase.co',
+  defaultValue: 'https://dylpsslfmrrnskboisia.supabase.co',
 );
 const supabasePublishableKey = String.fromEnvironment(
   'SUPABASE_PUBLISHABLE_KEY',
-  defaultValue: 'sb_publishable_8obXktLdXhvqDnH0r8SREQ_fFaGqV3X',
+  defaultValue: 'sb_publishable_qWJPGXNrlzavSQUA7VDg7A_efx_okYs',
 );
 const supabaseConfigured = supabaseUrl != '' && supabasePublishableKey != '';
 

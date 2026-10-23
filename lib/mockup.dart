@@ -27,6 +27,8 @@ class _EntryPageState extends State<EntryPage> {
   final confirmPassword = TextEditingController();
   final form = GlobalKey<FormState>();
   _EntryMode mode = _EntryMode.welcome;
+  String? confirmationEmail;
+  bool resendingConfirmation = false;
 
   @override
   void initState() {
@@ -115,7 +117,10 @@ class _EntryPageState extends State<EntryPage> {
         }
         if (response.session == null) {
           showMessage(l10n.emailConfirmation);
-          setState(() => mode = _EntryMode.signIn);
+          setState(() {
+            confirmationEmail = username;
+            mode = _EntryMode.signIn;
+          });
           return;
         }
         openLibrary(
@@ -148,12 +153,41 @@ class _EntryPageState extends State<EntryPage> {
       } else {
         showMessage(l10n.invalidCredentials);
       }
+    } on AuthException catch (error) {
+      if (!mounted) return;
+      if (error.code == 'email_not_confirmed') {
+        setState(() => confirmationEmail = username);
+        showMessage(l10n.emailConfirmation);
+      } else {
+        showMessage(l10n.authRequestError(error.message));
+      }
     } catch (error) {
+      if (!mounted) return;
       showMessage(
         widget.supabaseEnabled
             ? l10n.authRequestError(error.toString())
             : l10n.accountStorageError(error.toString()),
       );
+    }
+  }
+
+  Future<void> resendConfirmation() async {
+    final email = confirmationEmail;
+    if (email == null || resendingConfirmation) return;
+    final l10n = AppLocalizations.of(context)!;
+    setState(() => resendingConfirmation = true);
+    try {
+      await Supabase.instance.client.auth.resend(
+        type: OtpType.signup,
+        email: email,
+      );
+      if (mounted) showMessage(l10n.confirmationEmailSent);
+    } on AuthException catch (error) {
+      if (mounted) showMessage(l10n.authRequestError(error.message));
+    } catch (error) {
+      if (mounted) showMessage(l10n.authRequestError(error.toString()));
+    } finally {
+      if (mounted) setState(() => resendingConfirmation = false);
     }
   }
 
@@ -315,6 +349,23 @@ class _EntryPageState extends State<EntryPage> {
                             ),
                           ],
                           const SizedBox(height: 24),
+                          if (confirmationEmail != null) ...[
+                            Text(
+                              l10n.emailConfirmation,
+                              textAlign: TextAlign.center,
+                            ),
+                            Text(confirmationEmail!),
+                            TextButton.icon(
+                              onPressed: resendingConfirmation
+                                  ? null
+                                  : resendConfirmation,
+                              icon: const Icon(
+                                Icons.mark_email_unread_outlined,
+                              ),
+                              label: Text(l10n.resendConfirmationEmail),
+                            ),
+                            const SizedBox(height: 16),
+                          ],
                           SizedBox(
                             width: double.infinity,
                             child: FilledButton(
