@@ -1044,6 +1044,7 @@ class StudyPage extends StatefulWidget {
 
 class _StudyPageState extends State<StudyPage> with WidgetsBindingObserver {
   late List<Flashcard> round;
+  List<String> quizOptions = [];
   final List<Flashcard> missed = [];
   final answer = TextEditingController();
   final watch = Stopwatch();
@@ -1065,6 +1066,7 @@ class _StudyPageState extends State<StudyPage> with WidgetsBindingObserver {
   void initState() {
     super.initState();
     round = List.of(widget.deck.cards);
+    if (widget.quiz) quizOptions = buildQuizOptions();
     focusSeconds = initialSeconds;
     focusRunning = widget.autoStart;
     watch.start();
@@ -1127,6 +1129,7 @@ class _StudyPageState extends State<StudyPage> with WidgetsBindingObserver {
         focusRunning = false;
       } else {
         index++;
+        if (widget.quiz) quizOptions = buildQuizOptions();
       }
       flipped = false;
       correct = null;
@@ -1237,6 +1240,7 @@ class _StudyPageState extends State<StudyPage> with WidgetsBindingObserver {
                       round = List.of(missed);
                       missed.clear();
                       index = 0;
+                      if (widget.quiz) quizOptions = buildQuizOptions();
                       complete = false;
                       watch.start();
                     }),
@@ -1256,72 +1260,73 @@ class _StudyPageState extends State<StudyPage> with WidgetsBindingObserver {
                 const SizedBox(height: 12),
                 LinearProgressIndicator(value: index / round.length),
                 const SizedBox(height: 24),
-                GestureDetector(
-                  onTap: widget.quiz
-                      ? null
-                      : () => setState(() => flipped = !flipped),
-                  onHorizontalDragStart: widget.quiz
-                      ? null
-                      : (_) => setState(() => dragDistance = 0),
-                  onHorizontalDragUpdate: widget.quiz
-                      ? null
-                      : (details) =>
-                            setState(() => dragDistance += details.delta.dx),
-                  onHorizontalDragCancel: widget.quiz
-                      ? null
-                      : () => setState(() => dragDistance = 0),
-                  onHorizontalDragEnd: widget.quiz
-                      ? null
-                      : (_) {
-                          final distance = dragDistance;
-                          setState(() => dragDistance = 0);
-                          if (distance.abs() >= 80) next(distance > 0);
-                        },
-                  child: Transform.translate(
-                    offset: Offset(dragDistance, 0),
-                    child: Semantics(
-                      button: !widget.quiz,
-                      label: widget.quiz ? l10n.whichTerm : l10n.tapOrSwipe,
-                      child: Card(
-                        child: AnimatedSize(
-                          duration: const Duration(milliseconds: 200),
-                          child: Container(
-                            constraints: const BoxConstraints(minHeight: 240),
-                            padding: const EdgeInsets.all(32),
-                            alignment: Alignment.center,
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Text(
-                                  flipped
-                                      ? l10n.definition.toUpperCase()
-                                      : l10n.term.toUpperCase(),
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .labelMedium,
-                                ),
-                                const SizedBox(height: 24),
-                                Text(
-                                  flipped
-                                      ? round[index].answer
-                                      : round[index].term,
-                                  textAlign: TextAlign.center,
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .headlineSmall,
-                                ),
-                                if (!widget.quiz) ...[
+                if (!widget.quiz)
+                  GestureDetector(
+                    onTap: widget.quiz
+                        ? null
+                        : () => setState(() => flipped = !flipped),
+                    onHorizontalDragStart: widget.quiz
+                        ? null
+                        : (_) => setState(() => dragDistance = 0),
+                    onHorizontalDragUpdate: widget.quiz
+                        ? null
+                        : (details) =>
+                              setState(() => dragDistance += details.delta.dx),
+                    onHorizontalDragCancel: widget.quiz
+                        ? null
+                        : () => setState(() => dragDistance = 0),
+                    onHorizontalDragEnd: widget.quiz
+                        ? null
+                        : (_) {
+                            final distance = dragDistance;
+                            setState(() => dragDistance = 0);
+                            if (distance.abs() >= 80) next(distance > 0);
+                          },
+                    child: Transform.translate(
+                      offset: Offset(dragDistance, 0),
+                      child: Semantics(
+                        button: !widget.quiz,
+                        label: widget.quiz ? l10n.whichTerm : l10n.tapOrSwipe,
+                        child: Card(
+                          child: AnimatedSize(
+                            duration: const Duration(milliseconds: 200),
+                            child: Container(
+                              constraints: const BoxConstraints(minHeight: 240),
+                              padding: const EdgeInsets.all(32),
+                              alignment: Alignment.center,
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Text(
+                                    flipped
+                                        ? l10n.definition.toUpperCase()
+                                        : l10n.term.toUpperCase(),
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .labelMedium,
+                                  ),
                                   const SizedBox(height: 24),
-                                  Text(l10n.tapOrSwipe),
+                                  Text(
+                                    flipped
+                                        ? round[index].answer
+                                        : round[index].term,
+                                    textAlign: TextAlign.center,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .headlineSmall,
+                                  ),
+                                  if (!widget.quiz) ...[
+                                    const SizedBox(height: 24),
+                                    Text(l10n.tapOrSwipe),
+                                  ],
                                 ],
-                              ],
+                              ),
                             ),
                           ),
                         ),
                       ),
                     ),
                   ),
-                ),
                 const SizedBox(height: 24),
                 if (widget.quiz) ...[
                   Text(
@@ -1341,7 +1346,7 @@ class _StudyPageState extends State<StudyPage> with WidgetsBindingObserver {
                   ),
                   const SizedBox(height: 16),
                   if (correct == null)
-                    ...buildQuizOptions().map(
+                    ...quizOptions.map(
                       (option) => Padding(
                         padding: const EdgeInsets.only(bottom: 12),
                         child: FilledButton.tonal(

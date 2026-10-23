@@ -13,6 +13,56 @@ Widget localizedTestApp(Widget home) => MaterialApp(
 
 void main() {
   setUp(() => SharedPreferences.setMockInitialValues({}));
+  testWidgets('Quiz choices stay in order across ticks and timer controls', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(1200, 1600);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    addTearDown(() async => tester.pumpWidget(const SizedBox()));
+    final deck = Deck('Stable choices', [
+      for (var i = 1; i <= 6; i++) Flashcard('Term $i', 'Definition $i'),
+    ]);
+    await tester.pumpWidget(
+      localizedTestApp(StudyPage(deck: deck, quiz: true, autoStart: true)),
+    );
+
+    List<String> choices() => tester
+        .widgetList<FilledButton>(find.byType(FilledButton))
+        .map((button) => (button.child as Text).data!)
+        .toList();
+
+    Future<void> checkStableQuestion(String expectedTerm) async {
+      final initial = choices();
+      expect(initial, hasLength(4));
+      expect(initial, contains(expectedTerm));
+      for (var tick = 0; tick < 10; tick++) {
+        await tester.pump(const Duration(seconds: 1));
+        expect(choices(), initial);
+      }
+      for (final tooltip in [
+        'Pause focus timer',
+        'Start focus timer',
+        'Reset timer',
+      ]) {
+        await tester.tap(find.byTooltip(tooltip));
+        await tester.pump();
+        expect(choices(), initial);
+      }
+    }
+
+    await checkStableQuestion('Term 1');
+    await tester.tap(find.widgetWithText(FilledButton, 'Term 1'));
+    await tester.pump();
+    await tester.tap(find.text('Continue'));
+    await tester.pump();
+    expect(find.text('Definition 2'), findsOneWidget);
+    await tester.tap(find.byTooltip('Start focus timer'));
+    await tester.pump();
+    await checkStableQuestion('Term 2');
+  });
+
   testWidgets('Decks require at least two cards before saving', (tester) async {
     await tester.pumpWidget(localizedTestApp(EditorPage()));
     final fields = find.byType(TextFormField);
@@ -39,11 +89,21 @@ void main() {
       await tester.pumpWidget(
         localizedTestApp(StudyPage(deck: deck, quiz: true)),
       );
+      // Terms belong only in the choices, never in a revealing flashcard.
+      expect(find.text('TERM'), findsNothing);
+      expect(find.text('1'), findsOneWidget);
+      expect(find.text('One'), findsOneWidget);
+      expect(find.text('Two'), findsOneWidget);
+      expect(find.widgetWithText(FilledButton, 'One'), findsOneWidget);
+      expect(find.widgetWithText(FilledButton, 'Two'), findsOneWidget);
       await tester.tap(find.widgetWithText(FilledButton, 'Two'));
       await tester.pump();
       expect(find.text('Not quite. The correct term is One.'), findsOneWidget);
       await tester.tap(find.text('Continue'));
       await tester.pump();
+      expect(find.text('TERM'), findsNothing);
+      expect(find.text('2'), findsOneWidget);
+      expect(find.text('Two'), findsOneWidget);
       await tester.tap(find.widgetWithText(FilledButton, 'Two'));
       await tester.pump();
       expect(find.text('Correct!'), findsOneWidget);
