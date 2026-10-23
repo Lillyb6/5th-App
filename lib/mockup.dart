@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'l10n/app_localizations.dart';
@@ -691,12 +692,19 @@ class TimerChoicePage extends StatefulWidget {
 
 class _TimerChoicePageState extends State<TimerChoicePage> {
   Deck? selected;
-  int minutes = 25;
+  int? minutes = 25;
+  final durationController = TextEditingController(text: '25');
   StudyTimerMode mode = StudyTimerMode.pomodoro;
   @override
   void initState() {
     super.initState();
     selected = widget.decks.isEmpty ? null : widget.decks.first;
+  }
+
+  @override
+  void dispose() {
+    durationController.dispose();
+    super.dispose();
   }
 
   @override
@@ -778,7 +786,9 @@ class _TimerChoicePageState extends State<TimerChoicePage> {
                     ),
                     const SizedBox(height: 12),
                     Text(
-                      mode == StudyTimerMode.pomodoro ? '$minutes:00' : '0:00',
+                      mode == StudyTimerMode.pomodoro
+                          ? '${minutes ?? 0}:00'
+                          : '0:00',
                       style: theme.textTheme.displaySmall?.copyWith(
                         fontSize: 56,
                         letterSpacing: -2,
@@ -794,20 +804,18 @@ class _TimerChoicePageState extends State<TimerChoicePage> {
                     ),
                     if (mode == StudyTimerMode.pomodoro) ...[
                       const SizedBox(height: 22),
-                      DropdownButtonFormField<int>(
-                        initialValue: minutes,
+                      TextFormField(
+                        controller: durationController,
+                        keyboardType: TextInputType.number,
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly,
+                        ],
                         decoration: InputDecoration(
                           labelText: l10n.timerDuration,
+                          helperText: l10n.minutes(minutes ?? 0),
                         ),
-                        items: [5, 10, 15, 25, 30, 50, 60]
-                            .map(
-                              (value) => DropdownMenuItem(
-                                value: value,
-                                child: Text(l10n.minutes(value)),
-                              ),
-                            )
-                            .toList(),
-                        onChanged: (value) => setState(() => minutes = value!),
+                        onChanged: (value) =>
+                            setState(() => minutes = int.tryParse(value)),
                       ),
                     ],
                   ],
@@ -839,11 +847,14 @@ class _TimerChoicePageState extends State<TimerChoicePage> {
                 ),
               const SizedBox(height: 24),
               FilledButton.icon(
-                onPressed: selected == null
+                onPressed:
+                    selected == null ||
+                        (mode == StudyTimerMode.pomodoro &&
+                            (minutes == null || minutes! <= 0))
                     ? null
                     : () => widget.onStudy(
                         selected!,
-                        mode == StudyTimerMode.pomodoro ? minutes : 0,
+                        mode == StudyTimerMode.pomodoro ? minutes! : 0,
                         mode,
                       ),
                 icon: const Icon(Icons.play_arrow_rounded),

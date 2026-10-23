@@ -1,10 +1,47 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:fifthapp/main.dart';
+import 'package:fifthapp/mockup.dart';
 
 import 'widget_test.dart' show localizedTestApp;
 
 void main() {
+  testWidgets(
+    'Pomodoro accepts custom minutes and requires a positive duration',
+    (tester) async {
+      tester.view.physicalSize = const Size(1200, 1400);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
+      int? startedMinutes;
+      await tester.pumpWidget(
+        localizedTestApp(
+          TimerChoicePage(
+            decks: [
+              Deck('Test', [Flashcard('One', '1')]),
+            ],
+            onStudy: (deck, minutes, mode) async => startedMinutes = minutes,
+          ),
+        ),
+      );
+      final duration = find.byType(TextFormField);
+      final start = find.widgetWithText(FilledButton, 'Begin studying');
+      await tester.enterText(duration, '37');
+      await tester.pump();
+      expect(find.text('37:00'), findsOneWidget);
+      await tester.tap(start);
+      expect(startedMinutes, 37);
+      for (final value in ['', '0']) {
+        await tester.enterText(duration, value);
+        await tester.pump();
+        expect(tester.widget<FilledButton>(start).onPressed, isNull);
+      }
+      await tester.enterText(duration, '42');
+      await tester.pump();
+      expect(tester.widget<FilledButton>(start).onPressed, isNotNull);
+    },
+  );
+
   for (final mode in [StudyTimerMode.openEnded, StudyTimerMode.flowtime]) {
     testWidgets('$mode counts up, pauses, resets and handles breaks', (
       tester,
