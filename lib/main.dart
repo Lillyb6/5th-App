@@ -1044,6 +1044,7 @@ class StudyPage extends StatefulWidget {
 
 class _StudyPageState extends State<StudyPage> with WidgetsBindingObserver {
   late List<Flashcard> round;
+  List<String> quizOptions = [];
   final List<Flashcard> missed = [];
   final answer = TextEditingController();
   final watch = Stopwatch();
@@ -1065,6 +1066,7 @@ class _StudyPageState extends State<StudyPage> with WidgetsBindingObserver {
   void initState() {
     super.initState();
     round = List.of(widget.deck.cards);
+    if (widget.quiz) quizOptions = buildQuizOptions();
     focusSeconds = initialSeconds;
     focusRunning = widget.autoStart;
     watch.start();
@@ -1127,6 +1129,7 @@ class _StudyPageState extends State<StudyPage> with WidgetsBindingObserver {
         focusRunning = false;
       } else {
         index++;
+        if (widget.quiz) quizOptions = buildQuizOptions();
       }
       flipped = false;
       correct = null;
@@ -1237,6 +1240,7 @@ class _StudyPageState extends State<StudyPage> with WidgetsBindingObserver {
                       round = List.of(missed);
                       missed.clear();
                       index = 0;
+                      if (widget.quiz) quizOptions = buildQuizOptions();
                       complete = false;
                       watch.start();
                     }),
@@ -1342,7 +1346,7 @@ class _StudyPageState extends State<StudyPage> with WidgetsBindingObserver {
                   ),
                   const SizedBox(height: 16),
                   if (correct == null)
-                    ...buildQuizOptions().map(
+                    ...quizOptions.map(
                       (option) => Padding(
                         padding: const EdgeInsets.only(bottom: 12),
                         child: FilledButton.tonal(
