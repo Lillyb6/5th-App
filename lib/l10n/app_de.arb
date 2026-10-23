@@ -18,6 +18,8 @@
   "usernameTaken": "Dieser Benutzername ist bereits vergeben.",
   "invalidCredentials": "Benutzername oder Passwort ist falsch.",
   "emailInvalid": "Gib eine gültige E-Mail-Adresse ein",
+  "resendConfirmationEmail": "Bestätigungs-E-Mail erneut senden",
+  "confirmationEmailSent": "Bestätigungs-E-Mail angefordert. Prüfe deinen Posteingang und Spamordner und melde dich dann an.",
   "emailConfirmation": "Prüfe deine E-Mail, um dein Konto zu bestätigen, und melde dich dann an.",
   "authRequestError": "Die Kontoanfrage konnte nicht abgeschlossen werden: {error}",
   "accountStorageError": "Auf lokale Konten konnte nicht zugegriffen werden: {error}",

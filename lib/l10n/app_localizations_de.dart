@@ -69,6 +69,13 @@ class AppLocalizationsDe extends AppLocalizations {
   String get emailInvalid => 'Gib eine gültige E-Mail-Adresse ein';
 
   @override
+  String get resendConfirmationEmail => 'Bestätigungs-E-Mail erneut senden';
+
+  @override
+  String get confirmationEmailSent =>
+      'Bestätigungs-E-Mail angefordert. Prüfe deinen Posteingang und Spamordner und melde dich dann an.';
+
+  @override
   String get emailConfirmation =>
       'Prüfe deine E-Mail, um dein Konto zu bestätigen, und melde dich dann an.';
 

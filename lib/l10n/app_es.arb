@@ -18,6 +18,8 @@
   "usernameTaken": "Ese nombre de usuario ya está en uso.",
   "invalidCredentials": "El nombre de usuario o la contraseña no son correctos.",
   "emailInvalid": "Introduce una dirección de correo válida",
+  "resendConfirmationEmail": "Reenviar correo de confirmación",
+  "confirmationEmailSent": "Se solicitó un correo de confirmación. Revisa tu bandeja de entrada y la carpeta de spam, y luego inicia sesión.",
   "emailConfirmation": "Revisa tu correo para confirmar la cuenta y luego inicia sesión.",
   "authRequestError": "No se pudo completar la solicitud de cuenta: {error}",
   "accountStorageError": "No se pudo acceder a las cuentas locales: {error}",

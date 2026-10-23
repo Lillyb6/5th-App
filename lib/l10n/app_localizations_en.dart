@@ -67,6 +67,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get emailInvalid => 'Enter a valid email address';
 
   @override
+  String get resendConfirmationEmail => 'Resend confirmation email';
+
+  @override
+  String get confirmationEmailSent =>
+      'Confirmation email requested. Check your inbox and spam folder, then sign in.';
+
+  @override
   String get emailConfirmation =>
       'Check your email to confirm your account, then sign in.';
 

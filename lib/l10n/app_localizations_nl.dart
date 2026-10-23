@@ -69,6 +69,13 @@ class AppLocalizationsNl extends AppLocalizations {
   String get emailInvalid => 'Voer een geldig e-mailadres in';
 
   @override
+  String get resendConfirmationEmail => 'Bevestigingsmail opnieuw versturen';
+
+  @override
+  String get confirmationEmailSent =>
+      'Bevestigingsmail aangevraagd. Controleer je inbox en spammap en log daarna in.';
+
+  @override
   String get emailConfirmation =>
       'Controleer je e-mail om je account te bevestigen en log daarna in.';
 

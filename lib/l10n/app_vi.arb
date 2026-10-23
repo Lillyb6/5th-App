@@ -18,6 +18,8 @@
   "usernameTaken": "Tên người dùng này đã được sử dụng.",
   "invalidCredentials": "Tên người dùng hoặc mật khẩu không đúng.",
   "emailInvalid": "Vui lòng nhập địa chỉ email hợp lệ",
+  "resendConfirmationEmail": "Gửi lại email xác nhận",
+  "confirmationEmailSent": "Đã yêu cầu email xác nhận. Kiểm tra hộp thư đến và thư rác, sau đó đăng nhập.",
   "emailConfirmation": "Hãy kiểm tra email để xác nhận tài khoản, sau đó đăng nhập.",
   "authRequestError": "Không thể hoàn tất yêu cầu tài khoản: {error}",
   "accountStorageError": "Không thể truy cập tài khoản trên thiết bị: {error}",

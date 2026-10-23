@@ -66,6 +66,13 @@ class AppLocalizationsJa extends AppLocalizations {
   String get emailInvalid => '有効なメールアドレスを入力してください';
 
   @override
+  String get resendConfirmationEmail => '確認メールを再送信';
+
+  @override
+  String get confirmationEmailSent =>
+      '確認メールをリクエストしました。受信トレイと迷惑メールフォルダを確認してからログインしてください。';
+
+  @override
   String get emailConfirmation => 'メールを確認してアカウントを認証してからログインしてください。';
 
   @override

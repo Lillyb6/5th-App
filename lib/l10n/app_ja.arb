@@ -18,6 +18,8 @@
   "usernameTaken": "このユーザー名はすでに使用されています。",
   "invalidCredentials": "ユーザー名またはパスワードが正しくありません。",
   "emailInvalid": "有効なメールアドレスを入力してください",
+  "resendConfirmationEmail": "確認メールを再送信",
+  "confirmationEmailSent": "確認メールをリクエストしました。受信トレイと迷惑メールフォルダを確認してからログインしてください。",
   "emailConfirmation": "メールを確認してアカウントを認証してからログインしてください。",
   "authRequestError": "アカウントのリクエストを完了できませんでした: {error}",
   "accountStorageError": "ローカルアカウントにアクセスできません: {error}",

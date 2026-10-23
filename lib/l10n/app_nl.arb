@@ -18,6 +18,8 @@
   "usernameTaken": "Deze gebruikersnaam is al in gebruik.",
   "invalidCredentials": "Gebruikersnaam of wachtwoord is onjuist.",
   "emailInvalid": "Voer een geldig e-mailadres in",
+  "resendConfirmationEmail": "Bevestigingsmail opnieuw versturen",
+  "confirmationEmailSent": "Bevestigingsmail aangevraagd. Controleer je inbox en spammap en log daarna in.",
   "emailConfirmation": "Controleer je e-mail om je account te bevestigen en log daarna in.",
   "authRequestError": "Accountverzoek kon niet worden voltooid: {error}",
   "accountStorageError": "Lokale accounts zijn niet toegankelijk: {error}",

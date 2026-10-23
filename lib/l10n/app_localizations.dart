@@ -216,6 +216,18 @@ abstract class AppLocalizations {
   /// **'Enter a valid email address'**
   String get emailInvalid;
 
+  /// No description provided for @resendConfirmationEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Resend confirmation email'**
+  String get resendConfirmationEmail;
+
+  /// No description provided for @confirmationEmailSent.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirmation email requested. Check your inbox and spam folder, then sign in.'**
+  String get confirmationEmailSent;
+
   /// No description provided for @emailConfirmation.
   ///
   /// In en, this message translates to:
