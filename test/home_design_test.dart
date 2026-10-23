@@ -40,7 +40,16 @@ void main() {
       );
       expect(selected, findsOneWidget);
     }
-    await tester.scrollUntilVisible(find.text('Begin studying'), 200);
+    await tester.scrollUntilVisible(
+      find.text('Begin studying'),
+      200,
+      scrollable: find
+          .descendant(
+            of: find.byType(ListView),
+            matching: find.byType(Scrollable),
+          )
+          .first,
+    );
     await tester.tap(find.byType(DropdownButtonFormField<Deck>));
     await tester.pumpAndSettle();
     await tester.tap(find.text('Second').last);
@@ -124,7 +133,16 @@ void main() {
       await tester.ensureVisible(find.text('Begin Studying!'));
       await tester.tap(find.text('Begin Studying!'));
       await tester.pumpAndSettle();
-      await tester.scrollUntilVisible(find.text('Begin studying'), 200);
+      await tester.scrollUntilVisible(
+        find.text('Begin studying'),
+        200,
+        scrollable: find
+            .descendant(
+              of: find.byType(ListView),
+              matching: find.byType(Scrollable),
+            )
+            .first,
+      );
       final button = tester.widget<FilledButton>(
         find.widgetWithText(FilledButton, 'Begin studying'),
       );

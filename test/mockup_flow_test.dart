@@ -29,7 +29,16 @@ void main() {
     await tester.tap(find.text('Pomodoro'));
     await tester.pumpAndSettle();
     expect(find.text('Mitochondria'), findsNothing);
-    await tester.scrollUntilVisible(find.text('Begin studying'), 200);
+    await tester.scrollUntilVisible(
+      find.text('Begin studying'),
+      200,
+      scrollable: find
+          .descendant(
+            of: find.byType(ListView),
+            matching: find.byType(Scrollable),
+          )
+          .first,
+    );
     await tester.tap(find.text('Begin studying'));
     await tester.pumpAndSettle();
     expect(find.text('25:00'), findsOneWidget);
