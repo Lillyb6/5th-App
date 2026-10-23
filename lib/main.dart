@@ -1256,72 +1256,73 @@ class _StudyPageState extends State<StudyPage> with WidgetsBindingObserver {
                 const SizedBox(height: 12),
                 LinearProgressIndicator(value: index / round.length),
                 const SizedBox(height: 24),
-                GestureDetector(
-                  onTap: widget.quiz
-                      ? null
-                      : () => setState(() => flipped = !flipped),
-                  onHorizontalDragStart: widget.quiz
-                      ? null
-                      : (_) => setState(() => dragDistance = 0),
-                  onHorizontalDragUpdate: widget.quiz
-                      ? null
-                      : (details) =>
-                            setState(() => dragDistance += details.delta.dx),
-                  onHorizontalDragCancel: widget.quiz
-                      ? null
-                      : () => setState(() => dragDistance = 0),
-                  onHorizontalDragEnd: widget.quiz
-                      ? null
-                      : (_) {
-                          final distance = dragDistance;
-                          setState(() => dragDistance = 0);
-                          if (distance.abs() >= 80) next(distance > 0);
-                        },
-                  child: Transform.translate(
-                    offset: Offset(dragDistance, 0),
-                    child: Semantics(
-                      button: !widget.quiz,
-                      label: widget.quiz ? l10n.whichTerm : l10n.tapOrSwipe,
-                      child: Card(
-                        child: AnimatedSize(
-                          duration: const Duration(milliseconds: 200),
-                          child: Container(
-                            constraints: const BoxConstraints(minHeight: 240),
-                            padding: const EdgeInsets.all(32),
-                            alignment: Alignment.center,
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Text(
-                                  flipped
-                                      ? l10n.definition.toUpperCase()
-                                      : l10n.term.toUpperCase(),
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .labelMedium,
-                                ),
-                                const SizedBox(height: 24),
-                                Text(
-                                  flipped
-                                      ? round[index].answer
-                                      : round[index].term,
-                                  textAlign: TextAlign.center,
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .headlineSmall,
-                                ),
-                                if (!widget.quiz) ...[
+                if (!widget.quiz)
+                  GestureDetector(
+                    onTap: widget.quiz
+                        ? null
+                        : () => setState(() => flipped = !flipped),
+                    onHorizontalDragStart: widget.quiz
+                        ? null
+                        : (_) => setState(() => dragDistance = 0),
+                    onHorizontalDragUpdate: widget.quiz
+                        ? null
+                        : (details) =>
+                              setState(() => dragDistance += details.delta.dx),
+                    onHorizontalDragCancel: widget.quiz
+                        ? null
+                        : () => setState(() => dragDistance = 0),
+                    onHorizontalDragEnd: widget.quiz
+                        ? null
+                        : (_) {
+                            final distance = dragDistance;
+                            setState(() => dragDistance = 0);
+                            if (distance.abs() >= 80) next(distance > 0);
+                          },
+                    child: Transform.translate(
+                      offset: Offset(dragDistance, 0),
+                      child: Semantics(
+                        button: !widget.quiz,
+                        label: widget.quiz ? l10n.whichTerm : l10n.tapOrSwipe,
+                        child: Card(
+                          child: AnimatedSize(
+                            duration: const Duration(milliseconds: 200),
+                            child: Container(
+                              constraints: const BoxConstraints(minHeight: 240),
+                              padding: const EdgeInsets.all(32),
+                              alignment: Alignment.center,
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Text(
+                                    flipped
+                                        ? l10n.definition.toUpperCase()
+                                        : l10n.term.toUpperCase(),
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .labelMedium,
+                                  ),
                                   const SizedBox(height: 24),
-                                  Text(l10n.tapOrSwipe),
+                                  Text(
+                                    flipped
+                                        ? round[index].answer
+                                        : round[index].term,
+                                    textAlign: TextAlign.center,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .headlineSmall,
+                                  ),
+                                  if (!widget.quiz) ...[
+                                    const SizedBox(height: 24),
+                                    Text(l10n.tapOrSwipe),
+                                  ],
                                 ],
-                              ],
+                              ),
                             ),
                           ),
                         ),
                       ),
                     ),
                   ),
-                ),
                 const SizedBox(height: 24),
                 if (widget.quiz) ...[
                   Text(

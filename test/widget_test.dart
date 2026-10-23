@@ -39,11 +39,21 @@ void main() {
       await tester.pumpWidget(
         localizedTestApp(StudyPage(deck: deck, quiz: true)),
       );
+      // Terms belong only in the choices, never in a revealing flashcard.
+      expect(find.text('TERM'), findsNothing);
+      expect(find.text('1'), findsOneWidget);
+      expect(find.text('One'), findsOneWidget);
+      expect(find.text('Two'), findsOneWidget);
+      expect(find.widgetWithText(FilledButton, 'One'), findsOneWidget);
+      expect(find.widgetWithText(FilledButton, 'Two'), findsOneWidget);
       await tester.tap(find.widgetWithText(FilledButton, 'Two'));
       await tester.pump();
       expect(find.text('Not quite. The correct term is One.'), findsOneWidget);
       await tester.tap(find.text('Continue'));
       await tester.pump();
+      expect(find.text('TERM'), findsNothing);
+      expect(find.text('2'), findsOneWidget);
+      expect(find.text('Two'), findsOneWidget);
       await tester.tap(find.widgetWithText(FilledButton, 'Two'));
       await tester.pump();
       expect(find.text('Correct!'), findsOneWidget);
